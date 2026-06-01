@@ -64,3 +64,8 @@
   top: calc(0.5lh + 1px);
   transform: translateY(-50%);
 }
+
+summary > h4 {
+  margin-bottom: 0;
+  line-height: unset;
+}
