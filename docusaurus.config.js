@@ -75,7 +75,7 @@ export default {
         },
         footer: {
             style: "dark",
-            copyright: `Copyright © ${new Date().getFullYear()} MiSArch contributors. Built with Docusaurus.`
+            copyright: `Original documentation © 2026 MiSArch contributors. Unofficial fork © 2026 Tobias Eisenreich. Built with Docusaurus.`
         },
         prism: {
             theme: lightTheme,
