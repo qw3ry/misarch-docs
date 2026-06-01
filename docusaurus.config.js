@@ -3,8 +3,6 @@
 
 import remarkMath from "remark-math";
 import rehypeKatex from "rehype-katex";
-import graphqlDocs from "./graphql.mjs";
-import { buildSchema } from "graphql";
 import lightTheme from "./prismLight.mjs";
 import darkTheme from "./prismDark.mjs";
 
@@ -80,21 +78,6 @@ export default {
         }
     },
     plugins: [
-        ...graphqlDocs.map((doc) => [
-            "@graphql-markdown/docusaurus",
-            {
-                id: doc.id,
-                schema: doc.path,
-                rootPath: ".",
-                baseURL: `docs/graphql/${doc.id}`,
-                docOptions: {
-                    index: true
-                },
-                loaders: {
-                    GraphQLFileLoader: "@graphql-tools/graphql-file-loader"
-                }
-            }
-        ]),
         [
             "@graphql-markdown/docusaurus",
             {

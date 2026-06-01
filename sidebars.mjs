@@ -1,5 +1,3 @@
-import graphqlDocs from "./graphql.mjs"
-
 /**
  * Creating a sidebar enables you to:
  - create an ordered group of docs

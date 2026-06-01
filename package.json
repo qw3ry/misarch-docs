@@ -14,8 +14,7 @@
         "write-heading-ids": "docusaurus write-heading-ids",
         "format": "prettier --write \"**/*.{ts,json,js,tsx,jsx,md,mdx}\"",
         "format:check": "prettier --check \"**/*.{ts,json,js,tsx,jsx,md,mdx}\"",
-        "render-diagrams": "node scripts/renderDiagrams.js",
-        "update-graphql-docs": "node scripts/updateGraphQLDocs.mjs"
+        "render-diagrams": "node scripts/renderDiagrams.js"
     },
     "dependencies": {
         "@docusaurus/core": "^3.10.1",
