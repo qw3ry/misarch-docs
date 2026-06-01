@@ -1,17 +1,22 @@
-journey
-    title Adding an item to the wishlist
-    section Enter online shop
-        Visit website: 5: User
-        Log in (optional): 3: User
-    section Browse online shop
-        Scroll through start page: 5: User
-        Check out categories: 3: User
-        Go to category: 3: User
-        Apply filter to category: 3: User
-        Scroll through products: 3: User
-        Go to product: 5: User
-        Read review: 1: User
-        Read another review: 5: User
-        Check out product variants: 3: User
-        Click on "Add to wishlist": 5: User
-        Choose wishlist: 5: User
+---
+title: Adding an item to the wishlist
+---
+flowchart LR
+subgraph  Enter online shop
+        A["Visit\nwebsite"]
+        B["Log in\n(optional)"]
+end
+subgraph  Browse online shop
+        C["Scroll through\nstart page"]
+        D["Check out\ncategories"]
+        E["Go to\ncategory"]
+        F["Apply filter\nto category"]
+        G["Scroll through\nproducts"]
+        H["Go to\nproduct"]
+        I["Read\nreview"]
+        J["Read another\nreview"]
+        K["Check out\nproduct variants"]
+        L["Click on\n'Add to wishlist'"]
+        M["Choose\nwishlist"]
+end
+        A-->B-->C-->D-->E-->F-->G-->H-->I-->J-->K-->L-->M

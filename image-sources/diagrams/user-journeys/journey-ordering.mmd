@@ -1,12 +1,17 @@
-journey
-    title Making an order
-    section Inspect shopping cart
-        Go to shopping cart: 4: User
-        Change quantity: 3: User
-        Remove item: 2: User
-        Proceed to checkout: 4: User
-    section Provide information
-        Choose delivery address: 4: User
-        Select shipping method: 3: User
-        Select payment method: 3: User
-        Confirm order: 4: User
+---
+title: Making an order
+---
+flowchart LR
+    subgraph Inspect shopping cart
+        A["Go to\nshopping cart"]
+        B["Change \nquantity"]
+        C["Remove \nitem"]
+        D["Proceed \nto checkout"]
+    end
+    subgraph Provide information
+        E["Choose \ndelivery address"]
+        F["Select \nshipping method"]
+        G["Select \npayment method"]
+        H["Confirm \norder"]
+    end
+    A-->B-->C-->D-->E-->F-->G-->H

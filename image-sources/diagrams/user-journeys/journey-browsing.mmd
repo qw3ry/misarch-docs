@@ -1,16 +1,21 @@
-journey
-    title Browsing the online shop
-    section Enter online shop
-        Visit website: 5: User
-        Log in (optional): 3: User
-    section Browse online shop
-        Scroll through start page: 5: User
-        Check out categories: 3: User
-        Go to category: 3: User
-        Apply filter to category: 3: User
-        Scroll through products: 3: User
-        Go to product: 5: User
-        Read review: 1: User
-        Read another review: 5: User
-        Check out product variants: 3: User
-        Add product to shopping cart: 5: User
+---
+title: Browsing the online shop
+---
+flowchart LR
+    subgraph Enter online shop
+        A[Visit\nwebsite]
+        B["Log in\n(optional)"]
+    end
+    subgraph Browse online shop
+        C[Scroll through\nstart page]
+        D[Check out\ncategories]
+        E[Go to\ncategory]
+        F[Apply filter\nto category]
+        G[Scroll through\nproducts]
+        H[Go to\nproduct]
+        I[Read\nreview]
+        J[Read another\nreview]
+        K[Check out\nproduct variants]
+        L[Add product to\nshopping cart]
+    end
+A-->B-->C-->D-->E-->F-->G-->H-->I-->J-->K-->L

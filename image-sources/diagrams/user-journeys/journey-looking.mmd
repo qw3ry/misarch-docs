@@ -1,15 +1,20 @@
-journey
-    title Looking for a specific product
-    section Enter online shop
-        Visit website: 4: User
-        Log in (optional): 3: User
-    section Look for specific product
-        Check out categories: 4: User
-        Go to promising category: 4: User
-        Apply filter to category: 4: User
-        Scroll through products: 4: User
-        Go to promising product: 5: User
-        Read product description: 4: User
-        Check out product variants: 4: User
-        Read reviews: 4: User
-        Decide if product found: 4: User
+---
+title: Looking for a specific product
+---
+flowchart LR
+subgraph Enter online shop
+        A["Visit\nwebsite"]
+        B["Log in\n(optional)"]
+end
+subgraph Look for specific product
+        C["Check out\ncategories"]
+        D["Go to\npromising category"]
+        E["Apply filter\nto category"]
+        F["Scroll through\nproducts"]
+        G["Go to\npromising product"]
+        H["Read product\ndescription"]
+        I["Check out\nproduct variants"]
+        J["Read\nreviews"]
+        K["Decide if\nproduct found"]
+end
+        A-->B-->C-->D-->E-->F-->G-->H-->I-->J-->K
