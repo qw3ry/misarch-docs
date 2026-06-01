@@ -32,6 +32,7 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         with:
           # Build output to publish to the `gh-pages` branch:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./build
           force_orphan: true
           publish_branch: main
