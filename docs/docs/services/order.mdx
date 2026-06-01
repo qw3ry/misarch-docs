@@ -15,10 +15,6 @@ Imported entities from other bounded contexts are marked with a dashed border.
 
 :::
 
-## API
-
-The service provides a GraphQL API, which is documented in the GraphQL API documentation (TODO).
-
 ## Technology Stack
 
 - **Language**: Rust
@@ -26,79 +22,16 @@ The service provides a GraphQL API, which is documented in the GraphQL API docum
 - **GraphQL Library**: [async_graphql](https://docs.rs/async-graphql/latest/async_graphql/)
 - **Database**: MongoDB
 
-## Repository Structure
+## Events
 
-The repository is structured as follows:
+This section lists events that are defined or used by the order service.
 
-<div className="repository-structure">
+### Published Events
 
-- `/src`: Source code of the service
-  - `/authorization.rs`: Header authorization logic of service
-  - `/event`: Dapr event handling
-    - `/http_event_service.rs`: Handling of incoming events
-    - `/model`: Event DTOs
-      - `/order_compenstation_dto.rs`: Order compensation DTO
-      - `/order_dto.rs`: Order DTO
-      - `/order_item_dto.rs`: Order item DTO
-    - `/order_compenstation.rs`: Compensation logic on `shipment/shipment/creation/failed` event
-  - `/graphql`: GraphQL API
-    - `/model`: GraphQL types
-      - `/connection`: GraphQL connection types
-        - `/base_connection.rs`: Generic GraphQL connection
-        - `/discount_connection.rs`: GraphQL connection of discount
-        - `/order_connection.rs`: GraphQL connection of order
-        - `/order_item_connection.rs`: GraphQL connection of an order item
-        - `/product_variant_version_connection.rs`: GraphQL connection of a product variant version
-      - `/foreign_types.rs`: Datatypes which are not part of the services bounded context
-      - `/order_datatypes.rs`: GraphQL datatypes for connection element ordering
-      - `/order_item.rs`: Order item datatype
-      - `/order.rs`: Order datatype
-      - `/payment_authorization.rs`: Payment authorization datatype
-      - `/user.rs`: User with additional GraphQL field(s) provided by this service
-    - `/mutation_input_structs.rs`: GraphQL input datatypes for mutations
-    - `/mutation.rs`: GraphQL mutations and associated functions
-    - `/query.rs`: GraphQL queries and associated functions
-  - `/main.rs`: Service execution and schema generation
-
-</div>
-
-## Defined Events
-
-This section lists events that are defined by the order service and can be used by other services.
-
-```tsx
-interface OrderItem {
-  id: string;
-  createdAt: string;
-  productVariantId: string;
-  productVariantVersionId: string;
-  taxRateVersionId: string;
-  shoppingCartItemId: string;
-  count: number;
-  compensatableAmount: number;
-  shipmentMethodId: string;
-  discountIds: string[];
-}
-
-interface PaymentAuthorization {
-  cvc: number;
-}
-
-enum OrderStatus {
-  PENDING,
-  PLACED,
-  REJECTED
-}
-
-enum RejectionReason {
-  INVALID_ORDER_DATA,
-  INVENTORY_RESERVATION_FAILED
-}
-```
-
-### Published Defined Events
-
+<details>
+    <summary>
 #### order/order/created
+    </summary>
 
 This event is published when an order is placed, which means its order status is set to `PLACED`.
 
@@ -119,8 +52,11 @@ This event is published when an order is placed, which means its order status is
   vatNumber?: string;
 }
 ```
-
+</details>
+<details>
+    <summary>
 #### order/order-compensation/created
+    </summary>
 
 This event is published when an order should be compensated due to a failed shipment.
 
@@ -133,30 +69,15 @@ This event is published when an order should be compensated due to a failed ship
   amountToCompensate: number
 }
 ```
+</details>
 
-### Subscribed Defined Events
+### Subscribed Events
 
-n/a
-
-## Imported Events
-
-This section lists events defined by other services that are used by the order service.
-
-### Published Imported Events
-
-n/a
-
-### Subscribed Imported Events
-
-- [catalog/product-variant-version/created](/docs/docs/dev-manuals/services/catalog#catalogproduct-variant-versioncreated): Used to obtain the current product variant versions for product variants.
-- [discount/coupon/created](/docs/docs/dev-manuals/services/discount#discountcouponcreated): Used to validate the existence of coupons.
-- [tax/tax-rate-version/created](/docs/docs/dev-manuals/services/tax#taxtax-rate-versioncreated): Used to obtain the current tax rate versions for tax rates.
-- [shipment/shipment-method/created](/docs/docs/dev-manuals/services/shipment#shipmentshipment-methodcreated): Used to validate the existence of shipment methods.
-- [user/user/created](/docs/docs/dev-manuals/services/user#userusercreated): Used to validate that orders belong to an existing user.
-- [address/user-address/created](/docs/docs/dev-manuals/services/address#addressuser-addresscreated): Used to validate that addresses exist for a user.
-- [address/user-address/archived](/docs/docs/dev-manuals/services/address#addressuser-addresscreated): Used to validate that addresses exist for a user.
-- [shipment/shipment/creation-failed](/docs/docs/dev-manuals/services/shipment#shipmentshipmentcreation-failed): Used to trigger order compensation for a shipment.
-
-## Important ADRs
-
-n/a
+- [catalog/product-variant-version/created](/docs/docs/services/catalog#catalogproduct-variant-versioncreated): Used to obtain the current product variant versions for product variants.
+- [discount/coupon/created](/docs/docs/services/discount#discountcouponcreated): Used to validate the existence of coupons.
+- [tax/tax-rate-version/created](/docs/docs/services/tax#taxtax-rate-versioncreated): Used to obtain the current tax rate versions for tax rates.
+- [shipment/shipment-method/created](/docs/docs/services/shipment#shipmentshipment-methodcreated): Used to validate the existence of shipment methods.
+- [user/user/created](/docs/docs/services/user#userusercreated): Used to validate that orders belong to an existing user.
+- [address/user-address/created](/docs/docs/services/address#addressuser-addresscreated): Used to validate that addresses exist for a user.
+- [address/user-address/archived](/docs/docs/services/address#addressuser-addresscreated): Used to validate that addresses exist for a user.
+- [shipment/shipment/creation-failed](/docs/docs/services/shipment#shipmentshipmentcreation-failed): Used to trigger order compensation for a shipment.

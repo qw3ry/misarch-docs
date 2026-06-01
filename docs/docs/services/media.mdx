@@ -22,16 +22,6 @@ The service parses the following environment variables:
 
 <CustomImage path="/renderedDiagrams/mediaDomainModel" width="216.50013771199997" height="93.5" />
 
-:::info
-
-Imported entities from other bounded contexts are marked with a dashed border.
-
-:::
-
-## API
-
-The service provides a GraphQL API, which is documented in the GraphQL API documentation (TODO).
-
 ## Technology Stack
 
 - **Language**: Rust
@@ -40,44 +30,15 @@ The service provides a GraphQL API, which is documented in the GraphQL API docum
 - **Database**: MinIO
 - **Reverse Proxy**: Nginx [nginx](https://nginx.org/en/)
 
-## Repository Structure
+## Events
 
-The repository is structured as follows:
+This section lists events that are defined or used by the media service.
 
-<div className="repository-structure">
+### Published Events
 
-- `/src`: Source code of the service
-  - `/authorization.rs`: Header authorization logic of service
-  - `/event`: Dapr event handling
-    - `/model`: Event DTOs
-      - `/media_dto.rs`: Media DTO
-  - `/graphql`: GraphQL API
-    - `/model`: GraphQL types
-      - `/connection`: GraphQL connection types
-        - `/media_connection.rs`: GraphQL connection of medias
-      - `/media.rs`: Media datatype
-    - `/mutation.rs`: GraphQL mutations and associated functions
-    - `/query.rs`: GraphQL queries and associated functions
-  - `/main.rs`: Service execution and schema generation
-
-</div>
-
-## Domain entities
-
-```
-interface Media {
-   id: string;
-   path: string,
-}
-```
-
-## Defined Events
-
-This section lists events that are defined by the media service and can be used by other services.
-
-### Published Defined Events
-
+<details><summary>
 #### media/media/created
+</summary>
 
 This event is published when a media is created.
 
@@ -86,23 +47,4 @@ This event is published when a media is created.
   id: string;
 }
 ```
-
-### Subscribed Defined Events
-
-n/a
-
-## Imported Events
-
-This section lists events defined by other services that are used by the media service.
-
-### Published Imported Events
-
-n/a
-
-### Subscribed Imported Events
-
-n/a
-
-## Important ADRs
-
-n/a
+</details>

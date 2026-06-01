@@ -15,10 +15,6 @@ Imported entities from other bounded contexts are marked with a dashed border.
 
 :::
 
-## API
-
-The service provides a GraphQL API, which is documented in the [GraphQL API documentation](/docs/graphql/discount).
-
 ## Technology Stack
 
 - **Language**: Kotlin
@@ -27,89 +23,16 @@ The service provides a GraphQL API, which is documented in the [GraphQL API docu
 - **Database**: PostgreSQL
 - **Schema Management**: Flyway
 
-## Repository Structure
+## Events
 
-The repository is structured as follows:
+This section lists events that are defined or used by the discount service.
 
-<div className="repository-structure" >
+### Published Events
 
-- `/src/main/`: Source code of the service
-  - `kotlin/org/misarch/discount/`: Kotlin source code
-    - `event/`: Dapr event handling
-      - `model/`: Event DTOs
-        - `order/`: Order context DTOs
-    - `graphql/`: GraphQL API
-      - `dataloader/`: Data loaders for efficient data fetching
-      - `federation/`: Apollo Federation entity resolvers
-      - `input/`: Input types for mutations
-      - `model/`: GraphQL types
-        - `connection/`: Connection types and logic for paginated queries
-    - `persistance/`: Database entities and repositories
-      - `model/`: R2DBC entities
-      - `repository/`: Spring Data R2DBC repositories
-    - `service/`: Service logic
-  - `resources/`: Spring Boot application configuration and SQL schema migration files
-    - `db/migration/`: Flyway SQL schema migration files
-
-</div>
-
-## Defined Events
-
-This section lists events that are defined by the discount service and can be used by other services.
-
-### Type Definitions
-
-The following types are used in the defined events:
-
-```tsx
-interface Order {
-  id: string;
-  userId: string;
-  createdAt: string;
-  orderStatus: OrderStatus;
-  placedAt: string;
-  rejectionReason?: RejectionReason;
-  orderItems: OrderItem[];
-  shipmentAddressId: string;
-  invoiceAddressId: string;
-  compensatableOrderAmount: number;
-  paymentInformationId: string;
-  paymentAuthorization?: PaymentAuthorization;
-  vatNumber?: string;
-}
-
-interface OrderItem {
-  id: string;
-  createdAt: string;
-  productVariantId: string;
-  productVariantVersionId: string;
-  taxRateVersionId: string;
-  shoppingCartItemId: string;
-  count: number;
-  compensatableAmount: number;
-  shipmentMethodId: string;
-  discountIds: string[];
-}
-
-interface PaymentAuthorization {
-  cvc: number;
-}
-
-enum OrderStatus {
-  PENDING,
-  PLACED,
-  REJECTED
-}
-
-enum RejectionReason {
-  INVALID_ORDER_DATA,
-  INVENTORY_RESERVATION_FAILED
-}
-```
-
-### Published Defined Events
-
+<details>
+    <summary>
 #### discount/discount/created
+    </summary>
 
 This event is published when a new discount is created.
 
@@ -126,8 +49,12 @@ This event is published when a new discount is created.
   discountAppliesToProductVariantIds: string[]
 }
 ```
+</details>
 
+<details>
+    <summary>
 #### discount/discount/updated
+    </summary>
 
 This event is published when a discount is updated.
 
@@ -144,8 +71,12 @@ This event is published when a discount is updated.
   discountAppliesToProductVariantIds: string[]
 }
 ```
+</details>
 
+<details>
+<summary>
 #### discount/coupon/created
+</summary>
 
 This event is published when a new coupon is created.
 
@@ -159,8 +90,12 @@ This event is published when a new coupon is created.
   validFrom: string
 }
 ```
+</details>
 
+<details>
+<summary>
 #### discount/coupon/updated
+</summary>
 
 This event is published when a coupon is updated.
 
@@ -174,8 +109,12 @@ This event is published when a coupon is updated.
   validFrom: string
 }
 ```
+</details>
 
+<details>
+<summary>
 #### discount/order/validation-succeeded
+</summary>
 
 This event is thrown when the validation of an order caused by inventory/product-item/reservation-succeeded (TODO link) is successful.
 
@@ -184,8 +123,12 @@ This event is thrown when the validation of an order caused by inventory/product
   order: Order;
 }
 ```
+</details>
 
+<details>
+<summary>
 #### discount/order/validation-failed
+</summary>
 
 This event is thrown when the validation of an order caused by inventory/product-item/reservation-succeeded (TODO link) is not successful.
 
@@ -195,27 +138,13 @@ This event is thrown when the validation of an order caused by inventory/product
   failingDiscountIds: string[]
 }
 ```
+</details>
 
-### Subscribed Defined Events
 
-n/a
+### Subscribed Events
 
-## Imported Events
-
-This section lists events defined by other services that are used by the discount service.
-
-### Published Imported Events
-
-n/a
-
-### Subscribed Imported Events
-
-- [inventory/product-item/reservation-succeeded](/docs/docs/dev-manuals/services/inventory#inventoryproduct-itemreservation-succeeded): Causes a validation of the order to check if the discounts can still be applied.
-- [user/user/created](/docs/docs/dev-manuals/services/user#userusercreated): Used to import `User` from the `User` bounded context.
-- [catalog/category/created](/docs/docs/dev-manuals/services/catalog#catalogcategorycreated): Used to import `Category` from the `Category` bounded context.
-- [catalog/product/created](/docs/docs/dev-manuals/services/catalog#catalogproductcreated): Used to import `Product` from the `Catalog` bounded context.
-- [catalog/product-variant/created](/docs/docs/dev-manuals/services/catalog#catalogproduct-variantcreated): Used to import `ProductVariant` from the `Catalog` bounded context.
-
-## Important ADRs
-
-n/a
+- [inventory/product-item/reservation-succeeded](/docs/docs/services/inventory#inventoryproduct-itemreservation-succeeded): Causes a validation of the order to check if the discounts can still be applied.
+- [user/user/created](/docs/docs/services/user#userusercreated): Used to import `User` from the `User` bounded context.
+- [catalog/category/created](/docs/docs/services/catalog#catalogcategorycreated): Used to import `Category` from the `Category` bounded context.
+- [catalog/product/created](/docs/docs/services/catalog#catalogproductcreated): Used to import `Product` from the `Catalog` bounded context.
+- [catalog/product-variant/created](/docs/docs/services/catalog#catalogproduct-variantcreated): Used to import `ProductVariant` from the `Catalog` bounded context.

@@ -10,14 +10,8 @@ It is responsible for managing products, their variants and versions, categories
 <CustomImage path="/renderedDiagrams/catalogDomainModel" width="1240.06640625" height="946.625" />
 
 :::info
-
 Imported entities from other bounded contexts are marked with a dashed border.
-
 :::
-
-## API
-
-The service provides a GraphQL API, which is documented in the [GraphQL API documentation](/docs/graphql/catalog).
 
 ## Technology Stack
 
@@ -27,38 +21,16 @@ The service provides a GraphQL API, which is documented in the [GraphQL API docu
 - **Database**: PostgreSQL
 - **Schema Management**: Flyway
 
-## Repository Structure
+## Events
 
-The repository is structured as follows:
+This section lists events that are defined or used by the catalog service.
 
-<div className="repository-structure" >
+### Published Events
 
-- `/src/main/`: Source code of the service
-  - `kotlin/org/misarch/catalog/`: Kotlin source code
-    - `event/`: Dapr event handling
-      - `model/`: Event DTOs
-    - `graphql/`: GraphQL API
-      - `dataloader/`: Data loaders for efficient data fetching
-      - `federation/`: Apollo Federation entity resolvers
-      - `input/`: Input types for mutations
-      - `model/`: GraphQL types
-        - `connection/`: Connection types and logic for paginated queries
-    - `persistance/`: Database entities and repositories
-      - `model/`: R2DBC entities
-      - `repository/`: Spring Data R2DBC repositories
-    - `service/`: Service logic
-  - `resources/`: Spring Boot application configuration and SQL schema migration files
-    - `db/migration/`: Flyway SQL schema migration files
-
-</div>
-
-## Defined Events
-
-This section lists events that are defined by the catalog service and can be used by other services.
-
-### Published Defined Events
-
+<details>
+<summary>
 #### catalog/product/created
+</summary>
 
 This event is published when a new product is created.
 
@@ -71,8 +43,12 @@ This event is published when a new product is created.
   categoryIds: string[]
 }
 ```
+</details>
 
+<details>
+<summary>
 #### catalog/product-variant/created
+</summary>
 
 This event is published when a new product variant is created.
 This includes the default variant created when a product is created.
@@ -85,8 +61,12 @@ This includes the default variant created when a product is created.
   isPubliclyVisible: boolean
 }
 ```
+</details>
 
+<details>
+<summary>
 #### catalog/product-variant-version/created
+</summary>
 
 This event is published when a new product variant version is created.
 This includes the initial version created when a product variant is created.
@@ -106,8 +86,12 @@ This includes the initial version created when a product variant is created.
   mediaIds: string[]
 }
 ```
+</details>
 
+<details>
+<summary>
 #### catalog/category/created
+</summary>
 
 This event is published when a new category is created.
 
@@ -118,8 +102,12 @@ This event is published when a new category is created.
   description: string
 }
 ```
+</details>
 
+<details>
+<summary>
 #### catalog/product/updated
+</summary>
 
 This event is published when a product is updated.
 
@@ -132,8 +120,12 @@ This event is published when a product is updated.
   categoryIds: string[]
 }
 ```
+</details>
 
+<details>
+<summary>
 #### catalog/product-variant/updated
+</summary>
 
 This event is published when a product variant is updated.
 
@@ -143,25 +135,14 @@ This event is published when a product variant is updated.
   isPubliclyVisible: boolean
 }
 ```
+</details>
 
-### Subscribed Defined Events
+### Subscribed Events
 
-n/a
-
-## Imported Events
-
-This section lists events defined by other services that are used by the catalog service.
-
-### Published Imported Events
-
-n/a
-
-### Subscribed Imported Events
-
-- [tax/tax-rate/created](/docs/docs/dev-manuals/services/tax#taxtax-rate-versioncreated): Used to import `TaxRate` from the `Tax` bounded context.
-- [media/media/created](/docs/docs/dev-manuals/services/media#mediamediacreated): Used to import `Media` from the `Media` bounded context.
+- [tax/tax-rate/created](/docs/docs/services/tax#taxtax-rate-versioncreated): Used to import `TaxRate` from the `Tax` bounded context.
+- [media/media/created](/docs/docs/services/media#mediamediacreated): Used to import `Media` from the `Media` bounded context.
 
 ## Important ADRs
 
-- [Merge Category and Product Service](/docs/docs/dev-manuals/adr/merge-category-and-product-service)
-- [No category hierarchy](/docs/docs/dev-manuals/adr/no-category-hierarchy)
+- [Merge Category and Product Service](/docs/docs/adr/merge-category-and-product-service)
+- [No category hierarchy](/docs/docs/adr/no-category-hierarchy)

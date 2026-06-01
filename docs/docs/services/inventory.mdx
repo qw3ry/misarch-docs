@@ -15,10 +15,6 @@ Imported entities from other bounded contexts are marked with a dashed border.
 
 :::
 
-## API
-
-The service provides a GraphQL API, which is documented in the [GraphQL API documentation](/docs/graphql/inventory).
-
 ## Technology Stack
 
 - **Language**: TypeScript
@@ -27,41 +23,16 @@ The service provides a GraphQL API, which is documented in the [GraphQL API docu
 - **Database**: MongoDB
 - **Entity Management**: Mongoose
 
-## Repository Structure
+## Events
 
-The repository is structured as follows:
+This section lists events that are defined or used by the inventory service.
 
-<div className="repository-structure" >
+### Published Events
 
-- `/src/`: Source code of the service
-  - `events/`: Dapr event handling
-    - `dto/`: Event DTOs
-  - `health/`: Health API
-  - `inventory/`: `ProductItem` Module
-    - `dto`: Inventory DTOs
-    - `entities/`: Inventory persistet entities
-    - `graphql-types/`: Types for graphQL
-  - `product-variant-partial/`: `ProductVariantPartial` Module
-    - `entities/`: ProuctVariantPartial persistet entities
-  - `shared/`: Shared Code between different modules
-    - `constants`: Shared constants
-    - `decorators`: Shared decorators
-    - `enums`: Shared enumerators
-    - `guards`: Shared guards
-    - `interfaces`: Shared interfaces
-    - `logger`: Logging configuration
-    - `scalars`: Shared graphQL scalars
-    - `utils`: Shared helpers
-
-</div>
-
-## Defined Events
-
-This section lists events that are defined by the inventory service and can be used by other services.
-
-### Published Defined Events
-
+<details>
+<summary>
 #### inventory/product/created
+</summary>
 
 This event is published when a new product is created.
 
@@ -74,8 +45,12 @@ This event is published when a new product is created.
   categoryIds: string[]
 }
 ```
+</details>
 
+<details>
+<summary>
 #### inventory/product-item/reservation-succeeded
+</summary>
 
 This event is published when all `ProductItems` for the `ProductVariants` of an `Orders` `OrderItems` were reserved successfully.
 
@@ -84,8 +59,12 @@ This event is published when all `ProductItems` for the `ProductVariants` of an 
   order: Order;
 }
 ```
+</details>
 
+<details>
+<summary>
 #### inventory/product-item/reservation-failed
+</summary>
 
 This event is published when at least one `ProductItem` for the `ProductVariants` of an `Orders` `OrderItems` could not be reserved.
 
@@ -95,30 +74,18 @@ This event is published when at least one `ProductItem` for the `ProductVariants
   failedProductVariantIds: string[]
 }
 ```
+</details>
 
-### Subscribed Defined Events
+### Subscribed Events
 
-n/a
-
-## Imported Events
-
-This section lists events defined by other services that are used by the catalog service.
-
-### Published Imported Events
-
-n/a
-
-### Subscribed Imported Events
-
-- [catalog/product-variant/created](/docs/docs/dev-manuals/services/catalog#catalogproduct-variantcreated): Used to import `ProductVariant` from the `Catalog` bounded context.
-- [order/order/created](/docs/docs/dev-manuals/services/order#orderordercreated): Used to reserve the `ProductItems` for an `Order`.
-- [payment/payment/payment-enabled](/docs/docs/dev-manuals/services/payment#paymentpayment-enabled): Send Inventory to Fullfillment
-- [payment/payment/payment-failed](/docs/docs/dev-manuals/services/payment#paymentpayment-failed): Releases Product Items related to the order
-- [shipment/shipment/status-updated](/docs/docs/dev-manuals/services/shipment#shipmentshipmentstatus-updated): Updates the inventory status based on the shipment status
-- [shipment/shipment/created](/docs/docs/dev-manuals/services/shipment#shipmentshipmentcreated): Updates the inventory status based on the shipment status
-- [discount/order/validation-failed](/docs/docs/dev-manuals/services/shipment#discountordervalidation-failed): Releases Product Items related to the order
+- [catalog/product-variant/created](/docs/docs/services/catalog#catalogproduct-variantcreated): Used to import `ProductVariant` from the `Catalog` bounded context.
+- [order/order/created](/docs/docs/services/order#orderordercreated): Used to reserve the `ProductItems` for an `Order`.
+- [payment/payment/payment-enabled](/docs/docs/services/payment#paymentpayment-enabled): Send Inventory to Fullfillment
+- [payment/payment/payment-failed](/docs/docs/services/payment#paymentpayment-failed): Releases Product Items related to the order
+- [shipment/shipment/status-updated](/docs/docs/services/shipment#shipmentshipmentstatus-updated): Updates the inventory status based on the shipment status
+- [shipment/shipment/created](/docs/docs/services/shipment#shipmentshipmentcreated): Updates the inventory status based on the shipment status
+- [discount/order/validation-failed](/docs/docs/services/shipment#discountordervalidation-failed): Releases Product Items related to the order
 
 ## Important ADRs
 
-- [Check Entity Consistency](/docs/docs/dev-manuals/adr/check-entity-consistency)
-- [Service Health Endpoint](/docs/docs/dev-manuals/adr/health-endpoint)
+- [Check Entity Consistency](/docs/docs/adr/check-entity-consistency)

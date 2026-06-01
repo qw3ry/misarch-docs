@@ -15,15 +15,11 @@ Imported entities from other bounded contexts are marked with a dashed border.
 
 :::
 
-## API
-
-The service provides a GraphQL API, which is documented in the [GraphQL API documentation](/docs/graphql/shipment).
-
-### REST API
+## REST API
 
 The service provides a REST API which is used by the external shipment provider to inform about shipment status changes.
 
-#### POST `/shipment/{id}/status`
+### POST `/shipment/{id}/status`
 
 Updates the status of a shipment.
 
@@ -50,52 +46,16 @@ enum ShipmentStatus {
 - **Database**: PostgreSQL
 - **Schema Management**: Flyway
 
-## Repository Structure
+## Events
 
-The repository is structured as follows:
+This section lists events that are defined or used by the shipment service.
 
-<div className="repository-structure" >
+### Published Events
 
-- `/src/main/`: Source code of the service
-  - `kotlin/org/misarch/shipment/`: Kotlin source code
-    - `event/`: Dapr event handling
-      - `model/`: Event DTOs
-    - `graphql/`: GraphQL API
-      - `dataloader/`: Data loaders for efficient data fetching
-      - `federation/`: Apollo Federation entity resolvers
-      - `input/`: Input types for mutations
-      - `model/`: GraphQL types
-        - `connection/`: Connection types and logic for paginated queries
-    - `persistance/`: Database entities and repositories
-      - `model/`: R2DBC entities
-      - `repository/`: Spring Data R2DBC repositories
-    - `provider/`: REST API for external shipment provider, configuration
-    - `service/`: Service logic
-  - `resources/`: Spring Boot application configuration and SQL schema migration files
-    - `db/migration/`: Flyway SQL schema migration files
-
-</div>
-
-## Defined Events
-
-This section lists events that are defined by the shipment service and can be used by other services.
-
-### Type Definitions
-
-The following types are used in the defined events:
-
-```tsx
-enum ShipmentStatus {
-  PENDING,
-  IN_PROGRESS,
-  DELIVERED,
-  FAILED
-}
-```
-
-### Published Defined Events
-
+<details>
+<summary>
 #### shipment/shipment/created
+</summary>
 
 This event is published when a new shipment is created.
 
@@ -110,8 +70,12 @@ This event is published when a new shipment is created.
   shipmentAddressId: string
 }
 ```
+</details>
 
+<details>
+<summary>
 #### shipment/shipment/creation-failed
+</summary>
 
 This event is published when the creation of a shipment failed.
 
@@ -125,8 +89,12 @@ This event is published when the creation of a shipment failed.
   reason: string
 }
 ```
+</details>
 
+<details>
+<summary>
 #### shipment/shipment/status-updated
+</summary>
 
 This event is published when the status of a shipment is updated.
 
@@ -139,8 +107,12 @@ This event is published when the status of a shipment is updated.
   orderItemIds: string[],
 }
 ```
+</details>
 
+<details>
+<summary>
 #### shipment/shipment-method/created
+</summary>
 
 This event is published when a new shipment method is created.
 
@@ -155,8 +127,12 @@ This event is published when a new shipment method is created.
   feesPerKg: number
 }
 ```
+</details>
 
+<details>
+<summary>
 #### shipment/shipment-method/archived
+</summary>
 
 This event is published when a shipment method is archived.
 
@@ -165,27 +141,12 @@ This event is published when a shipment method is archived.
   id: string;
 }
 ```
+</details>
 
-### Subscribed Defined Events
+### Subscribed Events
 
-n/a
-
-## Imported Events
-
-This section lists events defined by other services that are used by the shipment service.
-
-### Published Imported Events
-
-n/a
-
-### Subscribed Imported Events
-
-- [payment/payment/payment-enabled](/docs/docs/dev-manuals/services/payment#paymentpaymentpayment-enabled): Used to create new shipments for an order when the order and associated payment is validated successfully.
-- [address/user-address/created](/docs/docs/dev-manuals/services/address#addressuser-addresscreated): Used to import `UserAddress` from the `Address` bounded context.
-- [address/vendor-address/created](/docs/docs/dev-manuals/services/address#addressvendor-addresscreated): Used to import `VendorAddress` from the `Address` bounded context.
-- [catalog/product-variant-version/created](/docs/docs/dev-manuals/services/catalog#catalogproduct-variant-versioncreated): Used to import `ProductVariantVersion` from the `Catalog` bounded context.
-- [return/return/created](/docs/docs/dev-manuals/services/return#returnreturncreated): Used to create a shipment for a return.
-
-## Important ADRs
-
-n/a
+- [payment/payment/payment-enabled](/docs/docs/services/payment#paymentpaymentpayment-enabled): Used to create new shipments for an order when the order and associated payment is validated successfully.
+- [address/user-address/created](/docs/docs/services/address#addressuser-addresscreated): Used to import `UserAddress` from the `Address` bounded context.
+- [address/vendor-address/created](/docs/docs/services/address#addressvendor-addresscreated): Used to import `VendorAddress` from the `Address` bounded context.
+- [catalog/product-variant-version/created](/docs/docs/services/catalog#catalogproduct-variant-versioncreated): Used to import `ProductVariantVersion` from the `Catalog` bounded context.
+- [return/return/created](/docs/docs/services/return#returnreturncreated): Used to create a shipment for a return.

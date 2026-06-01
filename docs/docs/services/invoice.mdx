@@ -26,91 +26,16 @@ The service provides a GraphQL API, which is documented in the GraphQL API docum
 - **GraphQL Library**: [async_graphql](https://docs.rs/async-graphql/latest/async_graphql/)
 - **Database**: MongoDB
 
-## Repository Structure
+## Events
 
-The repository is structured as follows:
+This section lists events that are defined or used by the invoice service.
 
-<div className="repository-structure">
+### Published Events
 
-- `/src`: Source code of the service
-  - `/event`: Dapr event handling
-    - `/http_event_service.rs`: Handling of incoming events
-    - `/model`: Event DTOs
-      - `/invoice_created_dto.rs`: Invoice created event DTO
-      - `/invoice_dto.rs`: Invoice DTO
-  - `/graphql`: GraphQL API
-    - `/model`: GraphQL types
-      - `/foreign_types.rs`: Datatypes which are not part of the services bounded context
-      - `/invoice.rs`: Invoice datatype
-      - `/order.rs`: Order datatype
-    - `/query.rs`: GraphQL queries and associated functions
-  - `/main.rs`: Service execution and schema generation
-
-</div>
-
-## Defined Events
-
-This section lists events that are defined by the invoice service and can be used by other services.
-
-### Type Definitions
-
-The following types are used in the defined events:
-
-```tsx
-interface Order {
-  id: string;
-  userId: string;
-  createdAt: string;
-  orderStatus: OrderStatus;
-  placedAt: string;
-  rejectionReason?: RejectionReason;
-  orderItems: OrderItem[];
-  shipmentAddressId: string;
-  invoiceAddressId: string;
-  compensatableOrderAmount: number;
-  paymentInformationId: string;
-  paymentAuthorization?: PaymentAuthorization;
-  vatNumber?: string;
-}
-
-interface OrderItem {
-  id: string;
-  createdAt: string;
-  productVariantId: string;
-  productVariantVersionId: string;
-  taxRateVersionId: string;
-  shoppingCartItemId: string;
-  count: number;
-  compensatableAmount: number;
-  shipmentMethodId: string;
-  discountIds: string[];
-}
-
-interface PaymentAuthorization {
-  cvc: number;
-}
-
-enum OrderStatus {
-  PENDING,
-  PLACED,
-  REJECTED
-}
-
-enum RejectionReason {
-  INVALID_ORDER_DATA,
-  INVENTORY_RESERVATION_FAILED
-}
-
-interface Invoice {
-  orderId: string;
-  issuedAt: string;
-  content: string;
-}
-```
-
-### Published Defined Events
-
+<details>
+    <summary>
 #### invoice/invoice/created
+    </summary>
 
 This event is published when an invoice for an order is created.
 
@@ -120,27 +45,12 @@ This event is published when an invoice for an order is created.
   invoice: Invoice,
 }
 ```
+</details>
 
-### Subscribed Defined Events
+### Subscribed Events
 
-n/a
-
-## Imported Events
-
-This section lists events defined by other services that are used by the invoice service.
-
-### Published Imported Events
-
-n/a
-
-### Subscribed Imported Events
-
-- [discount/order/validation-succeeded](/docs/docs/dev-manuals/services/discount#discountordervalidation-succeeded): Triggers this service to create an invoice and emit following event: `invoice/invoice/created`
-- [address/vendor-address/created](/docs/docs/dev-manuals/services/address#addressvendor-addresscreated): Used to obtain vendor address.
-- [user/user/created](/docs/docs/dev-manuals/services/user#userusercreated): Used to synchronize user addresses on users.
-- [address/user-address/created](/docs/docs/dev-manuals/services/address#addressuser-addresscreated): Used to obtain user address.
-- [address/user-address/archived](/docs/docs/dev-manuals/services/address#addressuser-addresscreated): Used to obtain user address.
-
-## Important ADRs
-
-n/a
+- [discount/order/validation-succeeded](/docs/docs/services/discount#discountordervalidation-succeeded): Triggers this service to create an invoice and emit following event: `invoice/invoice/created`
+- [address/vendor-address/created](/docs/docs/services/address#addressvendor-addresscreated): Used to obtain vendor address.
+- [user/user/created](/docs/docs/services/user#userusercreated): Used to synchronize user addresses on users.
+- [address/user-address/created](/docs/docs/services/address#addressuser-addresscreated): Used to obtain user address.
+- [address/user-address/archived](/docs/docs/services/address#addressuser-addresscreated): Used to obtain user address.
