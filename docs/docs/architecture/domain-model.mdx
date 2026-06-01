@@ -6,58 +6,52 @@ import CustomImage from "@site/src/components/CustomImage";
 
 # Domain Model
 
-## Domain Model
-
-<CustomImage path="/renderedDiagrams/domainModel" width="2803" height="2341" />
-
 ## Domain Model with Bounded Contexts
 
 <CustomImage path="/renderedDiagrams/domainModelBC" width="2820.5" height="2398.5" />
 
-## Implications of the Domain Model
+## Design Choices in the Domain Model
 
-Note, that entities of the domain model are formatted like this: `Entity`. A bounded context on the other hand has the following format: _Bounded Context_.
+In the following, an `Entity` of the domain model is formatted verbatim, and a _Bounded Context_ is formatted italic.
 
-### Regarding `User`, `Account`, `Wishlist` and `Address`
+### How the _Inventory_ handles *Return*s
 
-- To be able to order something from the store, a user needs an account. See: `User` has one `Account`. This implies that the store does not support something like "checkout as guest".
-- Addresses stored by the system do not have to be distinct regarding their actual physical address. The system may store multiple instances of the same physical address. One `Address` cannot be related to multiple `User` instances.
-- A user's wishlists are private and cannot be seen by other users.
-- Reviews can only be viewed. No further interactions with them are possible. Reviews do not have medias.
+The domain model does not automatically add returned items back to the _Inventory_. They need to be added manually, similar to a shipment from the manufacturer, or thrown away.
 
-### Regarding `ShoppingCart`
+### How `ShoppingCart` work
 
-- The _Inventory_ contains `ProductItems`. These `ProductItems` do not know anything about existing `ShoppingCarts`. That means a `ProductItem` does not know whether or not it has been added to a `ShoppingCart` in form of a `ShoppingCartItem`. This implies that when the user wants to _finish_ the order, the system must check once again whether or not the `ProductItem` is actually still available because it could have been ordered by a "faster" user in the meantime. In a nutshell, the user cannot reserve items by putting them in the shopping cart.
-- A user can have exactly one shopping cart at a time accross their devices. The shopping cart is independent of the client device used.
+- A `User` cannot reserve items by putting them in the `ShoppingCart`: The _Inventory_ contains `ProductItem`s as instances of a `ProductVariant`. These `ProductItem`s do not know about existing `ShoppingCart`s or `ShoppingCartItem`s. Thus, when the user wants to _finish_ the order, the system must check whether the `ProductItem` is still in stock, since it could have been ordered by another user in the meantime.
+- A `User` can have exactly one `ShoppingCart` at a time, independent of the client device used.
 
-### Regarding `Discount`
+### What `Invoice`s and `Payment`s mean
 
-- The store only offers discounts -- see `Discount` -- in percentages. The store does not have gift cards with a credit (money).
-  In order to have the option to apply a discount to a product, the user needs a coupon -- see `Coupon`. A coupon is associated with a fixed discount.
-- In general, a `Discount` can be applied to every product of the store. In order to exclude products from a `Discount`, a "filter" needs to be set up. A filter serves as a whitelist. There are three filter options: filter by `Product`, filter by `Product Variant`, and filter by `Category` -- see the corresponding associations in the domain model: `filterByProduct`, `filterByProductVariant`, and `filterByCategory`. As soon as one of these has been set up, only the explicitly filtered products / variants / products of the category are part of the discount's scope. Filters can be combined which means that the `Discount` can be used for a product if the product "is part of" one of the filters. To clearify things: If one has set up three filters, then if the product can be found in the first filter or if the product can be found in the second filter or if the product can be found in the third filter, then the discount is applicable to the product. If the product can be found in multiple of the three filters, then the discount is of course also applicable to the product. Only if it cannot be found in any of the three, then the discount cannot be used for the product.
+- An `Invoice` is associated with exactly one `Order`. Split invoices for parts of the order are not supported.
+- A `Payment` is only created after the associated `Invoice` has been paid.
+- The store supports only payment methods where the payment is completed before the shipping of any ordered items.
 
-### Regarding `TaxRate`
+### How `Discount` work
 
-- The store can only serve one country, to be more precise: one tax rate region. That means that every country where the store should be available needs to set up the store individually. The reason for that is that a single `ProductVariantVersion` must have exactly one `TaxRate`; it cannot have multiple. The domain model does not account for the fact that tax rates actually vary from country to country.
-- A tax rate does not depend on the user's status. Tax refunds / deduction are not supported by the system. The payment `Receipt` can be used to get tax refunds / deduction at the responsible authorities if possible.
+- A `Coupon` is a promotional offer. It allows a `User` to apply a `Discount` to a `Product`. Each `Coupon` is associated with a specific `Discount`.
+- The store only offers `Discount`s in percentages. The store does not have gift cards.
+- The `Discount` can have whitelist filters by `Product`, `ProductVariant`, and `Category`. If filters are present, the `Discount` can be applied to `Product`s matching any filter. If no filters are present, the `Discount` can be applied to all products.
 
-### Regarding `Notification`
+### International shops and business accounts
 
-- Notifications are _in-house_ meaning within-the-system notifications and they are not emails or text messages or anything else.
-- For the user, notifications are read-only. Users can only receive notifications, they cannot reply to them.
-- A notification can only be sent to exactly one user, it cannot be sent to multiple users at once.
+- Each `ProductVariantVersion` has its `TaxRate` specified. Thus, the store cannot easily operate in multiple tax rate regions.
+- Tax deduction for business accounts are not supported by the system, since the `TaxRate` is fixed for all `User`s.
 
-### Regarding `Invoice` and _Payment_
+### `Notification`s
 
-- An `Invoice` can only refer to exactly one `Order` and to nothing else.
-- If an `Invoice` has an associated `Payment`, then the payment has been made -- the store has received the money. If not, then the payment is still due. This implies that the association between `Invoice` and `Payment` fully models the payment's status.
-- The store exclusively supports payment methods which result in the payment being processed before the shipping of any ordered items. This implies that the user must always pay first before they can receive the order.
+- A `Notification` is within-the-system; they are not forwarded to emails, text messages, or anything else.
+- `Notification`s are read-only. `User`s can only receive notifications, they cannot reply to them.
+- Each `Notification` is sent to exactly one user. There are no broadcasts.
 
-### Regarding _Inventory_
+### How `User`s relate to their `Account`, `Wishlist`s, and `Address`es
 
-Since the domain model does not account for returned items, this implies that returned items will simply be thrown away after they have been returned to the _Inventory_.
+- To be able to order something from the store, a `User` needs an `Account`. This implies that the store does not support something like "checkout as guest".
+- Addresses stored by the system do not have to be unique physical addresses. The system may store multiple instances of the same physical address. One `Address` cannot be related to multiple `User` instances.
+- A user's `Wishlist`s are private and cannot be seen by other users.
 
 ### Regarding _Category_
 
-The store has no category inheritance.
-All categories are separate.
+The store has no `Category` hierarchy.

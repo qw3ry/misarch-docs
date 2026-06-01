@@ -1,5 +1,5 @@
 ---
-sidebar_position: 5
+sidebar_position: 2
 ---
 
 import CustomImage from "@site/src/components/CustomImage";
@@ -7,30 +7,13 @@ import CustomImage from "@site/src/components/CustomImage";
 # Component Diagram
 
 Overview of the main components and their interactions in the Misarch architecture.
-Databases, dapr, and event buses are ommited for clarity.
 
-Explanation:
-
-- **dottet line**: synchronous communication
-- **solid line**: asynchronous communication
+In addition, each service has an associated database. These are omitted in the overview picture. The communication between the components works via dapr and event buses, detailed below the component diagram. A **dottet line** denotes synchronous communication, a **solid line** asynchronous communication
 
 <CustomImage path="/renderedDiagrams/component" width="2702.5" height="1678.5" />
 
-## Interaction Between Components
+## Communication Between Service Components
 
-Interaction between components via dapr, detailing synchronous and asynchronous communication.
-
-Explanation:
-
-- **dottet line**: synchronous communication (dapr service invocation)
-- **solid line**: asynchronous communication (dapr pub/sub)
+The service components communicate via _dapr_. The **synchronous communication** (dottet line, dapr service invocation) and **asynchronous communication** (solid line, dapr pub/sub via event bus) works as follows:
 
 <CustomImage path="/renderedDiagrams/componentInteraction" width="1330" height="730" />
-
----
-
-## Component Diagram of Ceres
-
-For Ceres, the component diagram is as follows:
-
-<CustomImage path="/diagrams/comDiagDocker" width="1910" height="1365" />
