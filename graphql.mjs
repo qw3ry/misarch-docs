@@ -2,81 +2,81 @@ export default [
     {
         id: "address",
         path: "schemas/address.graphql",
-        docs: "/docs/docs/dev-manuals/services/address"
+        docs: "/docs/docs/services/address"
     },
     {
         id: "catalog",
         path: "schemas/catalog.graphql",
-        docs: "/docs/docs/dev-manuals/services/catalog"
+        docs: "/docs/docs/services/catalog"
     },
     {
         id: "discount",
         path: "schemas/discount.graphql",
-        docs: "/docs/docs/dev-manuals/services/discount"
+        docs: "/docs/docs/services/discount"
     },
     {
         id: "inventory",
         path: "schemas/inventory.graphql",
-        docs: "/docs/docs/dev-manuals/services/inventory"
+        docs: "/docs/docs/services/inventory"
     },
     {
         id: "invoice",
         path: "schemas/invoice.graphql",
-        docs: "/docs/docs/dev-manuals/services/invoice"
+        docs: "/docs/docs/services/invoice"
     },
     {
         id: "media",
         path: "schemas/media.graphql",
-        docs: "/docs/docs/dev-manuals/services/media"
+        docs: "/docs/docs/services/media"
     },
     {
         id: "notification",
         path: "schemas/notification.graphql",
-        docs: "/docs/docs/dev-manuals/services/notification"
+        docs: "/docs/docs/services/notification"
     },
     {
         id: "order",
         path: "schemas/order.graphql",
-        docs: "/docs/docs/dev-manuals/services/order"
+        docs: "/docs/docs/services/order"
     },
     {
         id: "payment",
         path: "schemas/payment.graphql",
-        docs: "/docs/docs/dev-manuals/services/payment"
+        docs: "/docs/docs/services/payment"
     },
     {
         id: "return",
         path: "schemas/return.graphql",
-        docs: "/docs/docs/dev-manuals/services/return"
+        docs: "/docs/docs/services/return"
     },
     {
         id: "review",
         path: "schemas/review.graphql",
-        docs: "/docs/docs/dev-manuals/services/review"
+        docs: "/docs/docs/services/review"
     },
     {
         id: "shipment",
         path: "schemas/shipment.graphql",
-        docs: "/docs/docs/dev-manuals/services/shipment"
+        docs: "/docs/docs/services/shipment"
     },
     {
         id: "shoppingcart",
         path: "schemas/shoppingcart.graphql",
-        docs: "/docs/docs/dev-manuals/services/shoppingcart"
+        docs: "/docs/docs/services/shoppingcart"
     },
     {
         id: "tax",
         path: "schemas/tax.graphql",
-        docs: "/docs/docs/dev-manuals/services/catalog"
+        docs: "/docs/docs/services/catalog"
     },
     {
         id: "user",
         path: "schemas/user.graphql",
-        docs: "/docs/docs/dev-manuals/services/user"
+        docs: "/docs/docs/services/user"
     },
     {
         id: "wishlist",
         path: "schemas/wishlist.graphql",
-        docs: "/docs/docs/dev-manuals/services/wishlist"
+        docs: "/docs/docs/services/wishlist"
     }
 ]

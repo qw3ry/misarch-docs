@@ -1,8 +1,0 @@
-{
-    "label": "Tooling",
-    "position": 4,
-    "link": {
-        "type": "generated-index",
-        "description": "The tooling setup of the MiSArch project"
-    }
-}

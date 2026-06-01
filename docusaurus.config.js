@@ -18,7 +18,6 @@ export default {
     organizationName: "misarch",
     projectName: "misarch.github.io",
     onBrokenLinks: "throw",
-    onBrokenMarkdownLinks: "throw",
     i18n: {
         defaultLocale: "en",
         locales: ["en"]
@@ -39,7 +38,18 @@ export default {
             })
         ]
     ],
-    themes: ["@docusaurus/theme-mermaid"],
+    themes: [
+        "@docusaurus/theme-mermaid",
+        [
+            require.resolve("@easyops-cn/docusaurus-search-local"),
+            /** @type {import("@easyops-cn/docusaurus-search-local").PluginOptions} */
+            ({
+                hashed: true,
+                removeDefaultStopWordFilter: true,
+                highlightSearchTermsOnTargetPage: true
+            })
+        ]
+    ],
     themeConfig: {
         navbar: {
             title: "MiSArch",
@@ -49,22 +59,8 @@ export default {
             },
             items: [
                 {
-                    type: "docSidebar",
-                    sidebarId: "docsSidebar",
-                    position: "left",
-                    label: "Docs"
-                },
-                {
-                    type: "docSidebar",
-                    sidebarId: "graphqlSupergraphSidebar",
-                    position: "left",
-                    label: "GraphQL"
-                },
-                {
-                    type: "docSidebar",
-                    sidebarId: "graphqlSidebar",
-                    position: "left",
-                    label: "GraphQL (services)"
+                    type: "search",
+                    position: "left"
                 },
                 {
                     href: "https://github.com/MiSArch",
@@ -116,7 +112,10 @@ export default {
         ]
     ],
     markdown: {
-        mermaid: true
+        mermaid: true,
+        hooks: {
+            onBrokenMarkdownLinks: "throw"
+        }
     },
     stylesheets: [
         {
