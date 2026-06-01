@@ -2,7 +2,7 @@
 sidebar_position: 2
 ---
 
-# Use GraphQL API Gateway
+# [ADR-2] Use GraphQL API Gateway
 
 ## Context and Problem Statement
 

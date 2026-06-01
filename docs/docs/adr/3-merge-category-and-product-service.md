@@ -2,7 +2,7 @@
 sidebar_position: 4
 ---
 
-# Merge Category and Product Service
+# [ADR-3] Merge Category and Product Service
 
 ## Context and Problem Statement
 

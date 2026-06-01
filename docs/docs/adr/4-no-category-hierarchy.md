@@ -2,7 +2,7 @@
 sidebar_position: 5
 ---
 
-# No category hierarchy
+# [ADR-4] No category hierarchy
 
 ## Context and Problem Statement
 
@@ -30,4 +30,4 @@ No Category hierarchy, simpler and good enough.
 
 - Good, simpler as each category is independent of each other
 - Good, hierarchy layer could be added dynamically if required:
-- Bad, user might loose track of the category context: For example: A category bow might represent weapons or tools for the violin
+- Bad, user might lose track of the category context: For example: A category bow might represent weapons or tools for the violin

@@ -2,7 +2,7 @@
 sidebar_position: 1
 ---
 
-# Use Monolithic Frontend
+# [ADR-1] Use Monolithic Frontend
 
 ## Context and Problem Statement
 

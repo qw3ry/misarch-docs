@@ -2,7 +2,7 @@
 sidebar_position: 10
 ---
 
-# Check Entity Consitency
+# [ADR-6] Check Entity Consistency
 
 ## Context and Problem Statement
 
