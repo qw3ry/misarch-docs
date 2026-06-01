@@ -26,9 +26,9 @@ classDiagram {
     }
 
     Services = package("Services") layout {
-        width = 2288
-        height = 1518
-        pos = apos(-775, -502.5)
+        width = 2025
+        height = 1414
+        pos = apos(-502, -499.5)
     }
 
     Catalog = component("Catalog") layout {
@@ -47,7 +47,7 @@ classDiagram {
     Review = component("Review") layout {
         pos = rpos(Catalog, 0, -230)
     }
-    
+
     ShoppingCart = component("ShoppingCart") layout {
         pos = apos(336, -65)
     }
@@ -65,15 +65,15 @@ classDiagram {
     }
 
     Notification = component("Notification") layout {
-        pos = rpos(User, -400, 0)
+        pos = rpos(User, 155, 215)
     }
 
     Keycloak = component("Keycloak") layout {
-        pos = rpos(User, 0, -199)
+        pos = rpos(User, -152, -251)
     }
 
     Address = component("Address") layout {
-        pos = rpos(User, 0, 162.5)
+        pos = rpos(User, 730, 377.5)
     }
 
     Order = component("Order") layout {
@@ -81,7 +81,7 @@ classDiagram {
     }
 
     Return = component("Return") layout {
-        pos = apos(589.5, 359.5)
+        pos = apos(733.5, 396.5)
     }
 
     Invoice = component("Invoice") layout {
@@ -93,15 +93,11 @@ classDiagram {
     }
 
     Payment = component("Payment") layout {
-        pos = rpos(Shipment, 0, 200)
+        pos = rpos(Shipment, -637, -312)
     }
 
     Gateway = component("Gateway") layout {
-        pos = apos(-1044.5, 283.5)
-    }
-
-    Simulation = component("Simulation") layout {
-        pos = apos(614.5, 1116)
+        pos = apos(-731.5, 291.5)
     }
 
     Media = component("Media") layout {
@@ -120,9 +116,8 @@ classDiagram {
         pos = rpos(ExperimentConfig, 0, 230)
     }
 
-
     Gateway ..> Services with {
-        over = start(0.989).line(end(0.496))
+        over = start(0.007).line(end(0.561))
     }
 
     Tax --> Catalog with {
@@ -138,15 +133,15 @@ classDiagram {
     }
 
     User --> Address with {
-        over = start(0.25).axisAligned(-0.565, end(0.75))
+        over = start(0.332).axisAligned(0, end(0.5))
     }
 
     Inventory --> Discount with {
-        over = start(0.375).axisAligned(0.5, end(0.976))
+        over = start(0.341).axisAligned(0, end(0.976))
     }
 
     User --> Discount with {
-        over = start(0.875).axisAligned(0.5, end(0.438))
+        over = start(0.75).axisAligned(0, end(0.5))
     }
 
     Catalog --> Discount with {
@@ -158,27 +153,27 @@ classDiagram {
     }
 
     User --> Notification with {
-        over = start(0.5).axisAligned(0.5, end(0))
+        over = start(0.196).axisAligned(1, end(0.649))
     }
 
     User --> Payment with {
-        over = start(0).axisAligned(0.306, end(0.5645))
+        over = start(0.75).axisAligned(0, end(0.486))
     }
 
     Shipment --> Return with {
-        over = start(0.684).axisAligned(-0.507, end(0.216))
+        over = start(0.684).axisAligned(1, end(0.216))
     }
 
     Order --> Return with {
-        over = start(0.515).axisAligned(0.255, end(0.103))
+        over = start(0.522).axisAligned(0.255, end(0.103))
     }
 
     Catalog --> Return with {
-        over = start(0.225).axisAligned(0, end(0))
+        over = start(0.23).axisAligned(1, end(0.849))
     }
 
     Address --> Shipment with {
-        over = start(0.093).axisAligned(0.5, end(0.5745))
+        over = start(0.815).axisAligned(-0.512   , end(0.28))
     }
 
     Catalog --> Shipment with {
@@ -186,27 +181,27 @@ classDiagram {
     }
 
     Shipment --> Notification with {
-        over = start(0.490125).axisAligned(-1, end(0.184))
+        over = start(0.498).axisAligned(0.693, end(0))
     }
 
     Payment --> Shipment with {
-        over = start(0.766).axisAligned(-0.352, end(0.234))
+        over = start(0.179).axisAligned(-0.503, end(0.654))
     }
 
     Keycloak --> User with {
-        over = start(0.25).axisAligned(-0.57, end(0.75))
+        over = start(0.151).axisAligned(-1, end(0.699))
     }
 
     Discount --> Invoice with {
-        over = start(0.217).axisAligned(-0.572, end(0.66))
+        over = start(0.196).axisAligned(1, end(0.68))
     }
 
     Address --> Invoice with {
-        over = start(0).axisAligned(0.5, end(0.469))
+        over = start(0.667).axisAligned(0, end(0.249))
     }
 
     User --> Invoice with {
-        over = start(0.1).axisAligned(0.5, end(0.559))
+        over = start(0.167).axisAligned(0, end(0.559))
     }
 
     Discount --> Order with {
@@ -226,11 +221,11 @@ classDiagram {
     }
 
     Address --> Order with {
-        over = start(0.26).axisAligned(0, rpos(Address, 0, 340), -1, end(0.141))
+        over = start(0).axisAligned(0, rpos(Address, 256, 0), -1, end(0.141))
     }
 
     User --> Review with {
-        over = start(0.875).axisAligned(0.116, end(0.476))
+        over = start(0.75).axisAligned(0, end(0.476))
     }
 
     Catalog --> Review with {
@@ -238,7 +233,7 @@ classDiagram {
     }
 
     User --> ShoppingCart with {
-        over = start(0.875).axisAligned(0.5, end(0.485))
+        over = start(0.75).axisAligned(0, end(0.5))
     }
 
     Catalog --> ShoppingCart with {
@@ -246,7 +241,7 @@ classDiagram {
     }
 
     User --> Wishlist with {
-        over = start(0.875).axisAligned(0.5, end(0.454))
+        over = start(0.75).axisAligned(0, end(0.5))
     }
 
     Catalog --> Wishlist with {
@@ -254,14 +249,7 @@ classDiagram {
     }
 
     Payment --> Notification with {
-        over = start(0.485625).axisAligned(-1, end(0.275))
-    }
-
-    list([Shipment, 0.41325], [Payment, 0.434125]).forEach {
-        (start, pos) = it
-        Simulation <..> start with {
-            over = start(Position.Top).axisAligned(0, end(pos))
-        }
+        over = start(0.298).axisAligned(-0.508, end(0.803))
     }
 
     Order ..> Shipment with {
@@ -283,7 +271,7 @@ classDiagram {
     }
 
     Discount --> Payment with {
-        over = start(0.322).axisAligned(-0.08, end(0.678125))
+        over = start(0.322).axisAligned(-0.08, end(0.822))
     }
 
     Media --> Catalog with {
@@ -295,7 +283,7 @@ classDiagram {
     }
 
     ExperimentConfig <--> Services with {
-        over = start(0).line(end(0.457625))
+        over = start(0.995).line(end(0.542))
     }
 
     ExperimentConfigFrontend ..> ExperimentConfig with {
