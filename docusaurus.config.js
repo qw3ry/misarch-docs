@@ -12,7 +12,7 @@ export default {
     tagline: "A representable microservice reference architecture",
     url: "https://misarch.github.io",
     favicon: "icons/misarch-logo.svg",
-    baseUrl: "/",
+    baseUrl: "/misarch-docs",
     organizationName: "misarch",
     projectName: "misarch.github.io",
     onBrokenLinks: "throw",
