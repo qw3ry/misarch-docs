@@ -97,7 +97,7 @@ classDiagram {
     }
 
     Gateway = component("Gateway") layout {
-        pos = apos(-731.5, 291.5)
+        pos = apos(-729.5, 220.5)
     }
 
     Media = component("Media") layout {
@@ -117,7 +117,7 @@ classDiagram {
     }
 
     Gateway ..> Services with {
-        over = start(0.007).line(end(0.561))
+        over = start(0.025).line(end(0.562))
     }
 
     Tax --> Catalog with {
