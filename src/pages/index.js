@@ -5,7 +5,7 @@ export default function Home() {
     const history = useHistory();
 
     useEffect(() => {
-        history.push("/docs");
+        history.push("/misarch-docs/docs");
     }, []);
 
     return null;
