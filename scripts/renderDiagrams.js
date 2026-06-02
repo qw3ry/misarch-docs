@@ -54,5 +54,5 @@ function convertFiles(inputFolder, outputFolder) {
     });
 }
 
-//convertFiles("diagrams", "static/renderedDiagrams");
+convertFiles("diagrams", "static/renderedDiagrams");
 convertFiles("image-sources/diagrams/user-journeys", "static/renderedDiagrams");
