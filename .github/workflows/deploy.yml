@@ -32,8 +32,10 @@ jobs:
         run: rm -rf ~/.cache ~/.npm node_modules static/renderedDiagrams/*
       - name: Install dependencies
         run: npm ci
+      - name: Install puppeteer browsers
+        run: npx puppeteer browsers install
       - name: Show puppeteer cache
-        run: find ~/.cache/puppeteer
+        run: find -type f ~/.cache/puppeteer
       - name: Render Mermaid and HyLiMo diagrams
         run: npm run render-diagrams
       - name: Build website
