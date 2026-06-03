@@ -9,8 +9,17 @@ function renderDiagram(inputFolder, file, outputFolder, cliBuilder, variant = ""
     const outputFilePath = path.join(outputFolder, outputFileName);
 
     const command = cliBuilder(inputFilePath, outputFilePath);
-    exec(command, {}, () => {
-        console.log(`Rendered ${file} to ${outputFileName}`);
+    exec(command, {}, (error, stdout, stderr) => {
+        if (error) {
+            console.error("Command failed:", error);
+            console.error("Exit code:", error.code);
+            console.error("stderr:", stderr);
+        } else {
+            if (stderr) {
+                console.warn("Command wrote to stderr:", stderr);
+            }
+            console.log(`Rendered ${file} to ${outputFileName}`);
+        }
     });
 }
 
