@@ -14,6 +14,7 @@ function renderDiagram(inputFolder, file, outputFolder, cliBuilder, variant = ""
             console.error("Command failed:", error);
             console.error("Exit code:", error.code);
             console.error("stderr:", stderr);
+            throw error;
         } else {
             if (stderr) {
                 console.warn("Command wrote to stderr:", stderr);
