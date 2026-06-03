@@ -2,6 +2,24 @@ const fs = require("fs");
 const path = require("path");
 const { exec } = require("child_process");
 
+function cliExec(command, success = undefined) {
+    exec(command, {}, (error, stdout, stderr) => {
+        if (error) {
+            console.error(`Command failed:`, error);
+            console.error("Exit code:", error.code);
+            console.error("stderr:", stderr);
+            throw error;
+        } else {
+            if (stderr) {
+                console.warn(`Command wrote to stderr:`, stderr);
+            }
+            if (success){
+                console.log(success);
+            }
+        }
+    });
+}
+
 function renderDiagram(inputFolder, file, outputFolder, cliBuilder, variant = "") {
     const baseName = file.substring(0, file.lastIndexOf("."));
     const inputFilePath = path.join(inputFolder, file);
@@ -9,19 +27,7 @@ function renderDiagram(inputFolder, file, outputFolder, cliBuilder, variant = ""
     const outputFilePath = path.join(outputFolder, outputFileName);
 
     const command = cliBuilder(inputFilePath, outputFilePath);
-    exec(command, {}, (error, stdout, stderr) => {
-        if (error) {
-            console.error("Command failed:", error);
-            console.error("Exit code:", error.code);
-            console.error("stderr:", stderr);
-            throw error;
-        } else {
-            if (stderr) {
-                console.warn("Command wrote to stderr:", stderr);
-            }
-            console.log(`Rendered ${file} to ${outputFileName}`);
-        }
-    });
+    cliExec(command, `Rendered ${file} to ${outputFileName}`);
 }
 
 function renderHylimoDiagram(inputFolder, file, outputFolder, variant = "", dark = false) {
@@ -29,7 +35,8 @@ function renderHylimoDiagram(inputFolder, file, outputFolder, variant = "", dark
         inputFolder,
         file,
         outputFolder,
-        (inputFilePath, outputFilePath) => `npx @hylimo/cli -f ${inputFilePath} -o ${outputFilePath} ${dark? "--dark" : ""}`,
+        (inputFilePath, outputFilePath) =>
+            `npx @hylimo/cli -f ${inputFilePath} -o ${outputFilePath} ${dark ? "--dark" : ""}`,
         variant
     );
 }
@@ -64,5 +71,17 @@ function convertFiles(inputFolder, outputFolder) {
     });
 }
 
-convertFiles("diagrams", "static/renderedDiagrams");
-convertFiles("image-sources/diagrams/user-journeys", "static/renderedDiagrams");
+const args = process.argv.slice(3);
+
+for (let i = 0; i + 1 < args.length; i += 2) {
+    console.log(`Converting ${args[i]} to ${args[i + 1]}`);
+    convertFiles(args[i], args[i + 1]);
+}
+if (process.argv[2] === "ci") {
+    // mermaid does not really work on ci
+    console.log("Copying pre-rendered diagrams for CI build");
+
+    fs.cp("./image-sources/pre-rendered", "./static/renderedDiagrams", { force: true, recursive: true }, (x) =>
+        x ? console.error(x) : () => {}
+    );
+}
