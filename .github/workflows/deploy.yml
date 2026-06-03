@@ -26,8 +26,12 @@ jobs:
         run: npm ci
       - name: Render HyLiMo diagrams
         run: npm run render-diagrams
+      - name: Are journeys present
+        run: ls static/renderedDiagrams
       - name: Build website
         run: npm run build
+      - name: Are journeys copied
+        run: ls build/renderedDiagrams
       # Popular action to deploy to GitHub Pages:
       # Docs: https://github.com/peaceiris/actions-gh-pages#%EF%B8%8F-docusaurus
       - name: Deploy to GitHub Pages
