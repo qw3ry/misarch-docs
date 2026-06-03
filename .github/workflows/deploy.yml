@@ -33,7 +33,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Show puppeteer cache
-        run: ls -la ~/.cache/puppeteer
+        run: find ~/.cache/puppeteer
       - name: Render Mermaid and HyLiMo diagrams
         run: npm run render-diagrams
       - name: Build website
