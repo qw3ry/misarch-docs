@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkdocs=globalThis.webpackChunkdocs||[]).push([[2634],{192(s,c,u){u.r(c),u.d(c,{default:()=>e});var o=u(6540),a=u(6347);function e(){const s=(0,a.W6)();return(0,o.useEffect)(()=>{s.push("/misarch-docs/docs")},[]),null}}}]);
