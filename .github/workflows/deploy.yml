@@ -25,7 +25,7 @@ jobs:
       - name: Install dependencies
         run: npm ci
       - name: Install Chromium for rendering Mermaid
-        run: sudo apt-get update && sudo apt-get install -y chromium-browser
+        run: npx puppeteer browsers install chrome-headless-shell
       - name: Render Mermaid and HyLiMo diagrams
         run: npm run render-diagrams
       - name: Build website
