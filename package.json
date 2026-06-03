@@ -72,5 +72,9 @@
                 }
             }
         ]
+    },
+    "allowScripts": {
+        "core-js@3.49.0": true,
+        "puppeteer@24.43.1": true
     }
 }
