@@ -32,6 +32,8 @@ jobs:
         run: rm -rf ~/.cache ~/.npm node_modules static/renderedDiagrams/*
       - name: Install dependencies
         run: npm ci
+      - name: Missing packages
+        run: ldd chrome | grep not
       - name: Install puppeteer browsers
         run: npx puppeteer browsers install
       - name: Show puppeteer cache
