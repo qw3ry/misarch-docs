@@ -40,7 +40,7 @@ function renderMermaidDiagram(inputFolder, file, outputFolder, variant = "", dar
         file,
         outputFolder,
         (inputFilePath, outputFilePath) =>
-            `npx -p @mermaid-js/mermaid-cli mmdc -i ${inputFilePath} -o ${outputFilePath} ${dark ? "-t dark -b #1b1b1d" : ""}`,
+            `mmdc -i ${inputFilePath} -o ${outputFilePath} ${dark ? "-t dark -b #1b1b1d" : ""}`,
         variant
     );
 }
