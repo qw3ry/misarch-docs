@@ -29,7 +29,7 @@ jobs:
           cache: npm
       - name: Invalidate cache if requested
         if: ${{ github.event.inputs.invalidate_cache == 'true' }}
-        run: rm -r ~/.cache ~/.npm node_modules static/renderedDiagrams/*
+        run: rm -rf ~/.cache ~/.npm node_modules static/renderedDiagrams/*
       - name: Install dependencies
         run: npm ci
       - name: Install Chromium for rendering Mermaid
