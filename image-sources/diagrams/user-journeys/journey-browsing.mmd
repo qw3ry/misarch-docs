@@ -2,11 +2,8 @@
 title: Browsing the online shop
 ---
 flowchart LR
-    subgraph Enter online shop
-        A[Visit\nwebsite]
-        B["Log in\n(optional)"]
-    end
     subgraph Browse online shop
+        direction LR
         C[Scroll through\nstart page]
         D[Check out\ncategories]
         E[Go to\ncategory]
@@ -18,4 +15,4 @@ flowchart LR
         K[Check out\nproduct variants]
         L[Add product to\nshopping cart]
     end
-    A --> B --> C --> D --> E --> F --> G --> H --> I --> J --> K --> L
+    C --> D --> E --> F --> G --> H --> I --> J --> K --> L

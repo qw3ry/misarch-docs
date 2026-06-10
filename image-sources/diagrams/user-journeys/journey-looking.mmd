@@ -2,11 +2,8 @@
 title: Looking for a specific product
 ---
 flowchart LR
-    subgraph Enter online shop
-        A["Visit\nwebsite"]
-        B["Log in\n(optional)"]
-    end
     subgraph Look for specific product
+        direction LR
         C["Check out\ncategories"]
         D["Go to\npromising category"]
         E["Apply filter\nto category"]
@@ -17,4 +14,4 @@ flowchart LR
         J["Read\nreviews"]
         K["Decide if\nproduct found"]
     end
-    A --> B --> C --> D --> E --> F --> G --> H --> I --> J --> K
+    C --> D --> E --> F --> G --> H --> I --> J --> K

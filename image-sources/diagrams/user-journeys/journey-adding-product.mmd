@@ -2,11 +2,8 @@
 title: Adding a new product that only has one variant
 ---
 flowchart LR
-    subgraph Enter online shop
-        A[Visit\nwebsite]
-        B[Log in\nas employee]
-    end
     subgraph Add new product
+        direction LR
         C["Click\n'Add Product'"]
         D[Provide\nname]
         E[Set\nvisibility]
@@ -17,4 +14,4 @@ flowchart LR
         J[Add product\nto categories]
         K["Click\n'Submit'"]
     end
-    A --> B --> C --> D --> E --> F --> G --> H --> I --> J --> K
+    C --> D --> E --> F --> G --> H --> I --> J --> K
