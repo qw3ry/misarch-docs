@@ -2,13 +2,13 @@
 title: Checking my order's status
 ---
 flowchart LR
-subgraph Enter online shop
+    subgraph Enter online shop
         A["Visit\nwebsite"]
         B["Log in"]
-end
-subgraph Check order status
+    end
+    subgraph Check order status
         C["Go to\nmy orders"]
         D["Go to order\nin question"]
         E["Check\nstatus"]
-end
-A-->B-->C-->D-->E
+    end
+    A --> B --> C --> D --> E

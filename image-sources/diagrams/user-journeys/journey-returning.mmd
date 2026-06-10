@@ -2,11 +2,11 @@
 title: Returning an ordered item
 ---
 flowchart LR
-subgraph Enter online shop
+    subgraph Enter online shop
         A["Visit \nwebsite"]
         B["Log in"]
     end
-subgraph Initiate return
+    subgraph Initiate return
         C["Go to \nmy orders"]
         D["Go to \norder in question"]
         E["Select items \nto return"]
@@ -15,5 +15,5 @@ subgraph Initiate return
         H["Check \nreturn instructions"]
         I["Print \nshipping label"]
         J["Receive \nrefund"]
-        end
-        A-->B-->C-->D-->E-->F-->G-->H-->I-->J
+    end
+    A --> B --> C --> D --> E --> F --> G --> H --> I --> J
