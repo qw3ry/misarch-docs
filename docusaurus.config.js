@@ -77,23 +77,6 @@ export default {
             additionalLanguages: ["bash"]
         }
     },
-    plugins: [
-        [
-            "@graphql-markdown/docusaurus",
-            {
-                id: "supergraph",
-                schema: "supergraph.graphql",
-                rootPath: ".",
-                baseURL: `docs/graphql/schema`,
-                docOptions: {
-                    index: true
-                },
-                loaders: {
-                    GraphQLFileLoader: "@graphql-tools/graphql-file-loader"
-                }
-            }
-        ]
-    ],
     markdown: {
         mermaid: true,
         hooks: {
