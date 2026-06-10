@@ -1,0 +1,82 @@
+---
+sidebar_position: 1
+---
+
+# Domain Requirements
+
+## 1. User Authentication & Access
+
+The system needs a way to manage and authenticate users. There are two kinds of users: regular users (customers) and employees with extra permissions.
+
+- **FR-1.1**: The system shall allow users to log in.
+- **FR-1.2**: The system shall allow visitors to browse products, categories, and search results without logging in.
+- **FR-1.3**: The system shall restrict product-management functions to authenticated employees.
+
+## 2. Products
+
+The system needs to support the management of products, as well as discovery and browsing of the product by users.
+
+### Product Management
+
+Employee users can create, edit, and delete products. Products can have variants that alter certain attributes of the product, such as its color.
+
+- **FR-2.1**: The system shall allow an employee to create new products or edit existing ones.
+- **FR-2.2**: The system shall allow an employee to add, edit, or delete variants of a product.
+- **FR-2.3**: Each variant can have at least a name, description, and product images.
+- **FR-2.4**: A variant can be "default", which means it will be the default variant for users when they view the product.
+- **FR-2.5**: Products can be grouped in product categories. Each category can have characteristics that apply to all products in the category, such as "color" or "size".
+- **FR-2.6**: A Product can belong to multiple categories.
+- **FR-2.6**: A product and variant needs to be set to "visible" to appear to non-employee users.
+- **FR-2.7**: Each variant must have a retail price, and can have a (lower) selling price if the product is on a sale.
+
+### Product Discovery & Browsing
+
+A visitor or regular user wants to find the products they need. They can do this by browsing the homepage, navigating through categories, or using a text search function.
+
+- **FR-2.8**: The system shall allow users to browse products from the homepage.
+- **FR-2.9**: The system shall display product categories and allow users to display the categorized products.
+- **FR-2.10**: The system shall allow users to search for products using a text-based search function.
+- **FR-2.11**: Within product categories or search results, the system shall allow users to apply filters.
+
+### Product Details
+
+When a user has found a product they are interested in, they want to inspect the product details, such as its description, variants, and reviews.
+
+- **FR-2.12**: The system shall allow users to open a product detail page.
+- **FR-2.13**: The product detail page should contain the product details, including its description, available variants, and customer reviews.
+
+## 3. Shopping Cart & Checkout
+
+Once the user has found the products they want to buy, they need a way to purchase them. The system needs to support a shopping cart and a checkout process.
+
+- **FR-3.1**: The system shall allow users to add products or variants to a shopping cart.
+- **FR-3.2**: The system shall allow users to view the contents of their shopping cart.
+- **FR-3.3**: The system shall allow users to change the quantity of items in their shopping cart or remove them from the shopping cart.
+- **FR-3.5**: The system shall support the checkout process detailed on the [Business Processes](architecture/business-processes) page.
+
+## 4. Orders and Returns
+
+After the user has placed an order as part of the checkout, they want to keep track of their orders. If they are not satisfied, they might want to return an item.
+
+- **FR-4.1**: The system shall provide users with access to their order history.
+- **FR-4.2**: The system shall allow users to view details of any placed order.
+- **FR-4.3**: The system shall display the current status of an order.
+- **FR-4.4**: The system shall support the return process detailed on the [Business Processes](architecture/business-processes) page.
+
+## 5. Wishlists
+
+Sometimes, a user does not want to buy a product right away, but wants to save it on a wishlist.
+
+- **FR-5.1**: The system shall support multiple wishlists per user.
+- **FR-5.2**: The system shall allow users to create, edit, and delete wishlists.
+- **FR-5.3**: Each wishlist has a name.
+- **FR-5.4**: Products can be added to wishlists from the product details page.
+
+## 6. Reviews
+
+To increase customer trust and provide feedback to the store, users can submit reviews for products they have purchased.
+
+- **FR-6.1**: Authenticated users can submit product reviews for products they have purchased.
+- **FR-6.2**: Each review has a title, rating, and text content.
+- **FR-6.3**: Users can create reviews directly from a product page, or from the order history.
+- **FR-6.4**: Reviews are published immediately upon submission.
