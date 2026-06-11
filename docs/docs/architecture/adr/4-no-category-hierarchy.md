@@ -4,6 +4,10 @@ sidebar_position: 5
 
 # [ADR-4] No category hierarchy
 
+:::warning
+Is this ADR feasible? It sounds very "this is for scientific purposes, so it's good enough".
+:::
+
 ## Context and Problem Statement
 
 A category hierarchy would enable better navigation of categories in the frontend.

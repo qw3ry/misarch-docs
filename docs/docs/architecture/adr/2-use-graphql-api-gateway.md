@@ -4,6 +4,10 @@ sidebar_position: 2
 
 # [ADR-2] Use GraphQL API Gateway
 
+:::warning
+Is this ADR feasible? Should we do "Use an API Gateway" instead?
+:::
+
 ## Context and Problem Statement
 
 The frontend needs to be able to send requests to the backend.
