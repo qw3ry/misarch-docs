@@ -61,7 +61,7 @@
   border-top: 2px solid var(--ifm-color-emphasis-500);
   position: absolute;
   left: -1.5em;
-  top: calc(0.5lh + 1px);
+  top: calc(0.5lh);
   transform: translateY(-50%);
 }
 
