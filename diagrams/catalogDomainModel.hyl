@@ -58,7 +58,7 @@ classDiagram {
     }
 
     class("CategoricalCategoryCharacteristic") layout {
-        pos = apos(1307.5, -140)
+        pos = apos(1307.5, -153)
     }
 
     class("CategoricalCategoryCharacteristicValue") {
@@ -82,7 +82,7 @@ classDiagram {
     }
 
     class("TaxRate") {
-        
+
     } layout {
         pos = apos(1347, 336.5)
     } styles {
@@ -90,31 +90,33 @@ classDiagram {
     }
 
     Product --> ProductVariant with {
-        label("1..* : variants", 0.6875, -62)
-        label("1 : product", 0.06, -43.1)
+        label("1..* : variants", 0.649, -141.4)
+        label("1 : product", 0.156, 57)
         over = start(0.1875).line(end(0.8125))
     }
 
     Product !--> ProductVariant with {
-        label("1 : defaultVariant", 0.75, 71.3)
-        label("0..1", 0.065, -29.8)
+        label("1 : defaultVariant", 0.675, 154.9) layout {
+            height = 13.75
+        }
+        label("0..1", 0.156, -33.1)
         over = start(0.25).line(end(0.75))
     }
 
     ProductVariant --> ProductVariantVersion with {
-        label("1..* : versions", 0.65, -59.9)
-        label("1 : productVariant", 0.1375, -67.8)
+        label("1..* : versions", 0.65, -143)
+        label("1 : productVariant", 0.055, 83.6)
         over = start(0.1875).line(end(0.8125))
     }
 
     ProductVariant !--> ProductVariantVersion with {
-        label("1 : currentVersion", 0.665, 77.3)
+        label("1 : currentVersion", 0.65, 158)
         label("0..1", 0.055, -33.1)
         over = start(0.25).line(end(0.75))
     }
 
     ProductVariantVersion !--> TaxRate with {
-        label("1 : taxRate", 0.828, 11.2)
+        label("1 : taxRate", 0.744, -21.7)
         label("0..*", 0.145, -24.4)
         over = start(0.07375).line(end(0.5))
     }
@@ -122,7 +124,7 @@ classDiagram {
     list(CategoricalCategoryCharacteristic, NumericalCategoryCharacteristic).forEach {
         it extends CategoryCharacteristic with {
             over = start(Position.Top).axisAligned(
-                -0.5,
+                -0.377,
                 end(Position.Bottom)
             )
         }
@@ -155,14 +157,14 @@ classDiagram {
     }
 
     Product --> Category with {
-        label("0..* : categories", 0.93, 12.7)
-        label("0..* : products", 0.195, 5.4)
+        label("0..* : categories", 0.912, 30.3)
+        label("0..* : products", 0.222, -14.9)
         over = start(Position.Right).axisAligned(0.248, end(Position.Left))
     }
 
     ProductVariantVersion !--> CategoryCharacteristicValue with {
-        label("0..* : characteristicValues", 0.7625, 12.3)
-        label("1", 0.1, 7.7)
+        label("0..* : characteristicValues", 0.72, -15.4)
+        label("1", 0.085, -3.8)
         over = start(0.91625).line(end(Position.Left))
     }
 

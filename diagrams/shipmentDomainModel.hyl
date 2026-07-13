@@ -82,44 +82,44 @@ classDiagram {
     }
 
     Shipment !--> ShipmentMethod with {
-        label("1 : shipmentMethod", 0.75125, 12.1)
-        label("0..*", 0.15, -23.6)
+        label("1 : shipmentMethod", 0.764, -24.7)
+        label("0..*", 0.101, -23.5)
         over = start(0).line(end(0.435))
     }
 
     Shipment !--> Address with {
-        label("1 : shipmentAddress", 0.56, -7)
-        label("0..*", 0.085, -16.5)
+        label("1 : shipmentAddress", 0.756, 23.3)
+        label("0..*", 0.117, 23.3)
         over = start(0.5).line(end(0))
     }
 
     Shipment !--> OrderItem with {
-        label("0..* : sentItems", 0.91875, -73.6)
-        label("1..*", 0.20875, 28)
+        label("0..* : sentItems", 0.854, -66)
+        label("1..*", 0.314, -24.5)
         over = start(0.695).line(end(0.305))
     }
 
     Order --> Shipment with {
-        label("1..* : shipments", 0.55375, 11.1)
-        label("0..1 : order", 0.02, -48.1)
+        label("1..* : shipments", 0.559, -20.4)
+        label("0..1 : order", 0.097, -48.2)
         over = start(0.235).axisAligned(-0.5, end(0.655))
     }
 
     Return --> Shipment with {
-        label("1 : shipment", 0.5675, -26.6)
-        label("0..1 : return", 0.4075, 34.8)
+        label("1 : shipment", 0.437, -38.9)
+        label("0..1 : return", 0.574, 20.4)
         over = start(0.2575).axisAligned(-0.5, end(0.86125))
     }
 
     Shipment <--! OrderItem with {
-        label("1 : sentWith", 0.45375, -49.2)
+        label("1 : sentWith", 0.314, 60.1)
         label("0..1", 0.94, -30.1)
         over = start(0.835).line(end(0.165))
     }
 
     OrderItem !--> ProductVariantVersion with {
-        label("1 : productVariantVersion", 0.922, 106.8, 0)
-        label("0..*", 0.198, 31.8)
+        label("1 : productVariantVersion", 0.805, 110.5, 0)
+        label("0..*", 0.355, 32.2)
         over = start(Position.Top).line(end(Position.Bottom))
     }
 

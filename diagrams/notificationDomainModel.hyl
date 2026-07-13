@@ -19,8 +19,8 @@ classDiagram {
     }
 
     User --> Notification with {
-        label("0..* : notifications", 0.63, -13.5)
-        label("1 : user", 0.155, 24.8)
+        label("0..* : notifications", 0.625, -34.8)
+        label("1 : user", 0.216, 17.6)
         over = start(0.575).line(end(0.005))
     }
 

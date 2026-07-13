@@ -24,13 +24,13 @@ classDiagram {
     Invoice --> Address with {
         over = start(0.485).axisAligned(1, end(0.324))
         label("1 : invoiceAddress", 0.65, 86)
-        label("0..* : invoicesAsCustomer", 0.089, -4.7)
+        label("0..* : invoicesAsCustomer", 0.089, 6.9)
     }
 
     Invoice --> Address with {
         over = start(0.585).axisAligned(1, end(0.162))
-        label("1 : vendorAddress", 0.65, 83.6)
-        label("0..* : invoicesAsVendor", 0.178, -5.9)
+        label("1 : vendorAddress", 0.644, 82)
+        label("0..* : invoicesAsVendor", 0.178, 6.9)
     }
 
     Order --> Invoice with {
