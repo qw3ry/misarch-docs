@@ -8,9 +8,9 @@ sidebar_position: 1
 
 The system needs a way to manage and authenticate users. There are two kinds of users: regular users (customers) and employees with extra permissions.
 
-- **FR-1.1**: The system shall allow users to log in.
-- **FR-1.2**: The system shall allow visitors to browse products, categories, and search results without logging in.
-- **FR-1.3**: The system shall restrict product-management functions to authenticated employees.
+- **FR-1.1**: Users can authenticate to the shop ("login").
+- **FR-1.2**: Visitors can browse products, categories, and search results without logging in.
+- **FR-1.3**: [Product Management](#product-management) functions are restricted to authenticated employees.
 
 ## 2. Products
 
@@ -20,8 +20,8 @@ The system needs to support the management of products, as well as discovery and
 
 Employee users can create, edit, and delete products. Products can have variants that alter certain attributes of the product, such as its color.
 
-- **FR-2.1**: The system shall allow an employee to create new products or edit existing ones.
-- **FR-2.2**: The system shall allow an employee to add, edit, or delete variants of a product.
+- **FR-2.1**: Employees can create new products or edit existing ones.
+- **FR-2.2**: Employees can add, edit, or delete variants of a product.
 - **FR-2.3**: Each variant can have at least a name, description, and product images.
 - **FR-2.4**: A variant can be "default", which means it will be the default variant for users when they view the product.
 - **FR-2.5**: Products can be grouped in product categories. Each category can have characteristics that apply to all products in the category, such as "color" or "size".
@@ -33,42 +33,42 @@ Employee users can create, edit, and delete products. Products can have variants
 
 A visitor or regular user wants to find the products they need. They can do this by browsing the homepage, navigating through categories, or using a text search function.
 
-- **FR-2.8**: The system shall allow users to browse products from the homepage.
-- **FR-2.9**: The system shall display product categories and allow users to display the categorized products.
-- **FR-2.10**: The system shall allow users to search for products using a text-based search function.
-- **FR-2.11**: Within product categories or search results, the system shall allow users to apply filters.
+- **FR-2.8**: Users and visitors can browse products from the homepage.
+- **FR-2.9**: Users and visitors can see and navigate product categories.
+- **FR-2.10**: Users and visitors can search for products using a text-based search function.
+- **FR-2.11**: Within product categories or search results, users and visitors can apply filters.
 
 ### Product Details
 
 When a user has found a product they are interested in, they want to inspect the product details, such as its description, variants, and reviews.
 
-- **FR-2.12**: The system shall allow users to open a product detail page.
+- **FR-2.12**: Users and visitors can open a product detail page.
 - **FR-2.13**: The product detail page should contain the product details, including its description, available variants, and customer reviews.
 
 ## 3. Shopping Cart & Checkout
 
 Once the user has found the products they want to buy, they need a way to purchase them. The system needs to support a shopping cart and a checkout process.
 
-- **FR-3.1**: The system shall allow users to add products or variants to a shopping cart.
-- **FR-3.2**: The system shall allow users to view the contents of their shopping cart.
-- **FR-3.3**: The system shall allow users to change the quantity of items in their shopping cart or remove them from the shopping cart.
-- **FR-3.5**: The system shall support the checkout process detailed on the [Business Processes](business-processes) page.
+- **FR-3.1**: Users can add products or variants to a shopping cart.
+- **FR-3.2**: Users can view the contents of their shopping cart.
+- **FR-3.3**: Users can change the quantity of items in their shopping cart or remove them from the shopping cart.
+- **FR-3.5**: The system shall support the checkout process as detailed on the [Business Processes](business-processes) page.
 
 ## 4. Orders and Returns
 
 After the user has placed an order as part of the checkout, they want to keep track of their orders. If they are not satisfied, they might want to return an item.
 
-- **FR-4.1**: The system shall provide users with access to their order history.
-- **FR-4.2**: The system shall allow users to view details of any placed order.
-- **FR-4.3**: The system shall display the current status of an order.
-- **FR-4.4**: The system shall support the return process detailed on the [Business Processes](business-processes) page.
+- **FR-4.1**: Users can access to their order history.
+- **FR-4.2**: Users can view details of their orders.
+- **FR-4.3**: Users can see the current status of their orders.
+- **FR-4.4**: Users can return process products as detailed on the [Business Processes](business-processes) page.
 
 ## 5. Wishlists
 
 Sometimes, a user does not want to buy a product right away, but wants to save it on a wishlist.
 
-- **FR-5.1**: The system shall support multiple wishlists per user.
-- **FR-5.2**: The system shall allow users to create, edit, and delete wishlists.
+- **FR-5.1**: Each user can have multiple wishlists.
+- **FR-5.2**: A user can create, edit, and delete wishlists.
 - **FR-5.3**: Each wishlist has a name.
 - **FR-5.4**: Products can be added to wishlists from the product details page.
 
