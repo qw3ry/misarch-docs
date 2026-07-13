@@ -1,0 +1,41 @@
+---
+sidebar_position: 2
+---
+
+# Quality Attributes
+
+:::warning
+I think the NFRs are rather design decisions already. Do we need to abstract them further?
+:::
+
+## 1. Scalability
+
+Especially during promotional events, the system might experience a massive increase in load. Since such events are often very profitable, the system should be able to handle increased load without outages or performance degradation. Thus, the system should be able to scale automatically, based on the load profile.
+
+- **NFR-1.1**: All databases must support scale out scenarios (i.e., support serving a single database via multiple servers).
+- **NFR-1.2**: The system must have a load balancer that can distribute requests to multiple instances of the same microservice.
+- **NFR-1.3**: The system shall scale automatically based on the load profile, identifying bottlenecks and adding or removing instances of microservices as needed.
+
+## 2. Observability
+
+With complex deployment and scaling strategies, the administrator must be able to observe and understand what the system is doing.
+
+- **NFR-2.1**: The system shall create detailed logs that include tracing information across microservices.
+- **NFR-2.2**: The system shall provide detailed metrics for individual microservices via a OpenTelemetry monitoring API.
+- **NFR-2.3**: The scaling mechanism must provide information about the scaling process, including the number of instances of each microservice and the load profile.
+
+## 3. Resilience
+
+The system should be resilient to avoid outages.
+
+- **NFR-3.1**: Each microservice must continue to operate, even when dependencies have outages. A degraded performance is acceptable, but answering requests, possibly with reduced functionality, warnings, or errors, is a must.
+
+## 4. Data integrity
+
+The system design should have the following properties:
+
+- **NFR-4.1**: The system supports distributed transactions, ensuring the data integrity across multiple microservices and databases.
+
+## 5. Modularity
+
+- **NFR-5.1**: Microservices must communicate with each other only via the microservices' documented APIs.
