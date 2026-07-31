@@ -25,7 +25,7 @@ A category can only be deleted if no product points to it. Should a category aut
 
 Chosen option: "Merge category and product service", because
 
-we have enough services to fulfill our requirement of 15 services. We do not see a clear cut that would still allow us to implement the functionality we want out of the system.
+We do not see a clear cut that would still allow us to implement the functionality we want out of the system.
 
 ## Pros and Cons of the Options
 
