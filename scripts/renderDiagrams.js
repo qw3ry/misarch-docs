@@ -13,7 +13,7 @@ function cliExec(command, success = undefined) {
             if (stderr) {
                 console.warn(`Command wrote to stderr:`, stderr);
             }
-            if (success){
+            if (success) {
                 console.log(success);
             }
         }
@@ -21,7 +21,7 @@ function cliExec(command, success = undefined) {
 }
 
 function renderDiagram(inputFolder, file, outputFolder, cliBuilder, variant = "") {
-    const baseName = file.substring(0, file.lastIndexOf("."));
+    const baseName = file.substring(file.lastIndexOf(path.sep) + 1, file.lastIndexOf("."));
     const inputFilePath = path.join(inputFolder, file);
     const outputFileName = baseName + (variant ? "-" + variant : "") + ".svg";
     const outputFilePath = path.join(outputFolder, outputFileName);
@@ -52,8 +52,18 @@ function renderMermaidDiagram(inputFolder, file, outputFolder, variant = "", dar
     );
 }
 
+function renderBpmnDiagram(inputFolder, file, outputFolder, variant = "", dark = false) {
+    renderDiagram(
+        inputFolder,
+        file,
+        outputFolder,
+        (inputFilePath, outputFilePath) => `bpmn-to-image ${inputFilePath};${outputFilePath}`,
+        variant
+    );
+}
+
 function convertFiles(inputFolder, outputFolder) {
-    fs.readdir(inputFolder, (err, files) => {
+    fs.readdir(inputFolder, { recursive: true }, (err, files) => {
         if (err) {
             console.error("Error reading directory:", err);
             return;
@@ -66,6 +76,11 @@ function convertFiles(inputFolder, outputFolder) {
             } else if (file.endsWith(".mmd")) {
                 renderMermaidDiagram(inputFolder, file, outputFolder, "light");
                 renderMermaidDiagram(inputFolder, file, outputFolder, "dark", true);
+            } else if (file.endsWith(".bpmn")) {
+                renderBpmnDiagram(inputFolder, file, outputFolder, "light");
+                renderBpmnDiagram(inputFolder, file, outputFolder, "dark");
+            } else {
+                console.warn(`Unknown file type: ${file}`);
             }
         });
     });
