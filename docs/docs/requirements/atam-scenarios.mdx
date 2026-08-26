@@ -74,7 +74,7 @@ sidebar_position: 4
 - **Response**: System enforces stock limits and rejects or backorders excess attempts safely
 - **Response Measure**: No oversell due to stale inventory in checkout path; inventory reflects committed sales within 30 seconds
 
-### Scenario D3 (Development-time) - Partial failure across order and payment
+### Scenario D3 (Business) - Partial failure across order and payment
 :::warning
 Does it make sense to evaluate this scenario in this environment?
 :::
@@ -85,37 +85,7 @@ Does it make sense to evaluate this scenario in this environment?
 - **Response**: System leaves no partial order state and executes compensating/rollback behavior
 - **Response Measure**: 100% of affected transactions end in either fully confirmed order or fully rolled back state
 
-## 4. Security & Data Privacy - Protect User Data and Payment Information
-
-:::warning
-Does it make sense to evaluate this QA in this environment? The architecture documentation and the ADRs do not contain much information on this.
-:::
-
-### Scenario S1 (Business) - Unauthorized access attempt to personal data
-- **Source**: Malicious actor or compromised account
-- **Stimulus**: Attempts to access another user's addresses/order history
-- **Environment**: Production, internet-facing system
-- **Artifact**: Authorization controls on user data APIs
-- **Response**: Access is denied and event is logged for audit and investigation
-- **Response Measure**: Zero unauthorized data disclosure; security log entry generated for each denied attempt
-
-### Scenario S2 (Business) - Data subject deletion request (GDPR)
-- **Source**: Customer
-- **Stimulus**: Requests deletion of personal data
-- **Environment**: Normal operations
-- **Artifact**: Data lifecycle and privacy workflow
-- **Response**: Personal data is removed or anonymized according to policy while legally required records are retained appropriately
-- **Response Measure**: Deletion workflow completes within policy-defined SLA; completion is auditable
-
-### Scenario S3 (Development-time) - Sensitive data leakage in logs
-- **Source**: Security monitoring or audit review
-- **Stimulus**: Detects potential logging of sensitive fields (e.g., payment/user secrets)
-- **Environment**: Production observability pipeline
-- **Artifact**: Logging and telemetry instrumentation
-- **Response**: Exposure is contained, logging rules are corrected, and affected records are handled per incident process
-- **Response Measure**: Detection within 15 minutes; remediation deployed within 24 hours; no continued leakage afterward
-
-## 5. Scalability - Handling User Spikes and Business Growth
+## 4. Scalability - Handling User Spikes and Business Growth
 
 ### Scenario SC1 (Business) - Flash sale traffic surge
 - **Source**: Externally controlled marketing campaign (e.g. TV advertisement) draws in customers
@@ -140,33 +110,3 @@ Does it make sense to evaluate this QA in this environment? The architecture doc
 - **Artifact**: Service-level scaling boundaries
 - **Response**: System scales only affected services without scaling unrelated ones
 - **Response Measure**: Bottleneck resolved within 2 minutes; no unnecessary scaling of other components
-
-## 6. Maintainability & Observability - Understand and Troubleshoot the System
-
-:::warning
-Does it make sense to evaluate this QA in this environment? The architecture documentation and the ADRs do not contain much information on this.
-:::
-
-### Scenario M1 (Business) - Slow checkout complaint
-- **Source**: Customer support
-- **Stimulus**: Reports "checkout is very slow" with order/session reference
-- **Environment**: Production, live customer issue
-- **Artifact**: Logs, metrics, traces, and alerting
-- **Response**: Team traces end-to-end request and identifies root-cause service/component quickly
-- **Response Measure**: Root cause isolated within 30 minutes; customer-impacting incident communication updated within 15 minutes
-
-### Scenario M2 (Business) - Degraded UX during incident
-- **Source**: Internal dependency degradation
-- **Stimulus**: Rising latency across one downstream dependency
-- **Environment**: Peak shopping period
-- **Artifact**: Monitoring, alerting, and resilience controls
-- **Response**: System and team detect degradation early, apply mitigation, and maintain critical user journeys
-- **Response Measure**: Alert triggered before full outage; mitigation initiated within 10 minutes; browse/cart/checkout remain available
-
-### Scenario M3 (Development-time) - Safe production release
-- **Source**: Development team
-- **Stimulus**: Deploys a new version with gradual rollout
-- **Environment**: Production deployment window
-- **Artifact**: Deployment automation, health checks, observability gates
-- **Response**: New release health is validated and rollout continues or is halted automatically
-- **Response Measure**: No downtime during rollout; rollback decision possible within 5 minutes based on live signals
