@@ -33,6 +33,16 @@ jobs:
           file diagrams/user-journeys/journey-looking-2.mmd
           sed -n '1,6l' diagrams/user-journeys/journey-looking-2.mmd
           xxd -g 1 -l 100 diagrams/user-journeys/journey-looking-2.mmd
+      - name: Mermaid CLI info
+        run: |
+          which mmdc
+          mmdc --version
+          npm list -g --depth=0
+      - name: Render journey
+        run: |
+          mmdc \
+            -i diagrams/user-journeys/journey-looking-2.mmd \
+            -o /tmp/journey.svg
       - name: Render diagrams
         run: npm run render-diagrams
       - name: Build website
