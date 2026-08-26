@@ -52,12 +52,12 @@ function renderMermaidDiagram(inputFolder, file, outputFolder, variant = "", dar
     );
 }
 
-function renderBpmnDiagram(inputFolder, file, outputFolder, variant = "", dark = false) {
+function renderBpmnDiagram(inputFolder, file, outputFolder, variant = "") {
     renderDiagram(
         inputFolder,
         file,
         outputFolder,
-        (inputFilePath, outputFilePath) => `bpmn-to-image ${inputFilePath};${outputFilePath}`,
+        (inputFilePath, outputFilePath) => `bpmn-to-image ${inputFilePath}${path.delimiter}${outputFilePath}`,
         variant
     );
 }

@@ -15,8 +15,7 @@
         "format": "prettier --write \"**/*.{ts,json,js,tsx,jsx,md,mdx}\"",
         "format:check": "prettier --check \"**/*.{ts,json,js,tsx,jsx,md,mdx}\"",
         "render-diagrams": "node scripts/renderDiagrams.js ci diagrams static/renderedDiagrams",
-        "render-diagrams-no-ci": "node scripts/renderDiagrams.js local diagrams static/renderedDiagrams image-sources/diagrams image-sources/pre-rendered",
-        "render-bpmn": "node scripts/renderDiagrams.js local image-sources/diagrams/bpmn image-sources/pre-rendered"
+        "render-diagrams-no-ci": "node scripts/renderDiagrams.js local diagrams static/renderedDiagrams image-sources/diagrams image-sources/pre-rendered"
     },
     "dependencies": {
         "@docusaurus/core": "^3.10.1",
