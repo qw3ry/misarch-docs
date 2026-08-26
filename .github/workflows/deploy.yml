@@ -28,6 +28,11 @@ jobs:
         run: npm install -g @mermaid-js/mermaid-cli@9.1.7
       - name: AppArmor workaround for puppeteer
         run: echo 0 | sudo tee /proc/sys/kernel/apparmor_restrict_unprivileged_userns
+      - name: Inspect Mermaid file
+        run: |
+          file diagrams/user-journeys/journey-looking-2.mmd
+          sed -n '1,6l' diagrams/user-journeys/journey-looking-2.mmd
+          xxd -g 1 -l 100 diagrams/user-journeys/journey-looking-2.mmd
       - name: Render diagrams
         run: npm run render-diagrams
       - name: Build website
