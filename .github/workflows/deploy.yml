@@ -27,7 +27,6 @@ jobs:
       - name: Install mermaid
         run: npm install -g @mermaid-js/mermaid-cli@9.1.7
       - name: AppArmor workaround for puppeteer
-        if: ${{ matrix.os == 'ubuntu-latest' }}
         run: echo 0 | sudo tee /proc/sys/kernel/apparmor_restrict_unprivileged_userns
       - name: Render Mermaid and HyLiMo diagrams
         run: npm run render-diagrams
