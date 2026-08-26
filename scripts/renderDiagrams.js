@@ -70,7 +70,9 @@ function convertFiles(inputFolder, outputFolder) {
         }
 
         files.forEach((file) => {
-            if (file.endsWith(".hyl")) {
+            if (fs.statSync(path.join(inputFolder, file)).isDirectory()) {
+                // file is a directory, no action needed
+            } else if (file.endsWith(".hyl")) {
                 renderHylimoDiagram(inputFolder, file, outputFolder, "light");
                 renderHylimoDiagram(inputFolder, file, outputFolder, "dark", true);
             } else if (file.endsWith(".mmd")) {
@@ -86,17 +88,9 @@ function convertFiles(inputFolder, outputFolder) {
     });
 }
 
-const args = process.argv.slice(3);
+const args = process.argv.slice(2);
 
 for (let i = 0; i + 1 < args.length; i += 2) {
     console.log(`Converting ${args[i]} to ${args[i + 1]}`);
     convertFiles(args[i], args[i + 1]);
-}
-if (process.argv[2] === "ci") {
-    // mermaid does not really work on ci
-    console.log("Copying pre-rendered diagrams for CI build");
-
-    fs.cp("./image-sources/pre-rendered", "./static/renderedDiagrams", { force: true, recursive: true }, (x) =>
-        x ? console.error(x) : () => {}
-    );
 }
