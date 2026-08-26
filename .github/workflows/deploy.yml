@@ -24,8 +24,6 @@ jobs:
           cache: npm
       - name: Install dependencies
         run: npm ci
-      - name: Install mermaid
-        run: npm install -g @mermaid-js/mermaid-cli@9.1.7
       - name: AppArmor workaround for puppeteer
         run: echo 0 | sudo tee /proc/sys/kernel/apparmor_restrict_unprivileged_userns
       - name: Inspect Mermaid file
