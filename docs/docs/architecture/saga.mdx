@@ -1,0 +1,61 @@
+---
+sidebar_position: 3
+---
+
+# Order Saga and Failure Model
+
+The buy process spans several services. This page describes how their work is coordinated at runtime, and how failures are handled.
+
+## Coordination Style
+
+Coordination is **purely event-based**. There is no orchestrator component, and no service drives the process centrally. Each participant subscribes to the event that concludes the preceding step, performs a local transaction, and publishes the outcome as a new event. The events are exchanged via _dapr_ pub/sub as described in the [component diagram](/docs/docs/architecture/component-diagram).
+
+The saga is **essentially linear**. The steps form a chain rather than a graph, and no step waits for several predecessors to complete. Only two events have more than one subscriber, and in both cases the additional subscriber performs work that the rest of the chain does not depend on.
+
+## Buy Saga
+
+| Step | Triggered by                                                    | Service   | Action                                                             | Publishes                                                                                                                                                                                                                                                                                                |
+| ---- | --------------------------------------------------------------- | --------- | ------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1    | Order is placed                                                 | Order     | Records the order with status `PLACED`                             | [order/order/created](/docs/docs/architecture/services/order#orderordercreated)                                                                                                                                                                                                                          |
+| 2    | `order/order/created`                                           | Inventory | Reserves the `ProductItems` for the order                          | [inventory/product-item/reservation-succeeded](/docs/docs/architecture/services/inventory#inventoryproduct-itemreservation-succeeded) or [reservation-failed](/docs/docs/architecture/services/inventory#inventoryproduct-itemreservation-failed)                                                        |
+| 3    | `inventory/product-item/reservation-succeeded`                  | Discount  | Validates the order to check if the discounts can still be applied | [discount/order/validation-succeeded](/docs/docs/architecture/services/discount#discountordervalidation-succeeded) or [validation-failed](/docs/docs/architecture/services/discount#discountordervalidation-failed)                                                                                      |
+| 4    | `discount/order/validation-succeeded`                           | Payment   | Starts the payment process                                         | [payment/payment/payment-enabled](/docs/docs/architecture/services/payment#paymentpaymentpayment-enabled), then [payment-processed](/docs/docs/architecture/services/payment#paymentpaymentpayment-processed) or [payment-failed](/docs/docs/architecture/services/payment#paymentpaymentpayment-failed) |
+| 5    | `payment/payment/payment-enabled`                               | Shipment  | Creates the shipments for the order                                | [shipment/shipment/created](/docs/docs/architecture/services/shipment#shipmentshipmentcreated) or [creation-failed](/docs/docs/architecture/services/shipment#shipmentshipmentcreation-failed)                                                                                                           |
+| 6    | `shipment/shipment/created`, `shipment/shipment/status-updated` | Inventory | Updates the inventory status based on the shipment status          | --                                                                                                                                                                                                                                                                                                       |
+
+Two steps have a second subscriber alongside the one that continues the chain:
+
+- On `discount/order/validation-succeeded`, the **Invoice** service creates the invoice and publishes [invoice/invoice/created](/docs/docs/architecture/services/invoice#invoiceinvoicecreated).
+- On `payment/payment/payment-enabled`, the **Inventory** service sends the reserved inventory to fulfillment.
+
+The **ShoppingCart** service also subscribes to `order/order/created` to remove the ordered items from the cart, and the **Return** service imports the `Order` and later the `Shipment` so that returns can reference them. Neither is part of the buy saga itself.
+
+## Failure Model
+
+The saga distinguishes two classes of error.
+
+### Transient errors
+
+Errors that are expected to resolve on their own are handled by retrying. Most processes retry indefinitely. The underlying assumption is that a service which is temporarily unavailable becomes available again after some time, so the step eventually succeeds without intervention. Transient errors are therefore not represented as events, and they do not abort the saga.
+
+### Final failures
+
+Errors that will not resolve by retrying are communicated explicitly, as a dedicated event. There is no central coordinator that detects them or decides what to do: the service that detects the failure publishes the corresponding failure event, and each affected participant reacts by undoing its own local work.
+
+| Detected by | Failure event                       | Reacting service | Compensating action                                                                                                                                 |
+| ----------- | ----------------------------------- | ---------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Discount    | `discount/order/validation-failed`  | Inventory        | Releases the product items related to the order                                                                                                     |
+| Payment     | `payment/payment/payment-failed`    | Inventory        | Releases the product items related to the order                                                                                                     |
+| Shipment    | `shipment/shipment/creation-failed` | Order            | Triggers order compensation and publishes [order/order-compensation/created](/docs/docs/architecture/services/order#orderorder-compensationcreated) |
+
+### Consistency
+
+Because each step commits locally and the outcome travels as an event, the participating services are not consistent with each other for the duration of the saga, and in particular while a compensation is still propagating. This is an accepted consequence of the loosely coupled, event-based coordination chosen in [ADR-6](/docs/docs/architecture/adr/check-entity-consistency) and [ADR-7](/docs/docs/architecture/adr/saga-and-retry-policy).
+
+:::info
+
+The following are not specified in this documentation and would need to be confirmed against the implementation: the delivery and ordering guarantees of the event bus, whether event consumers are required to be idempotent, and whether retries are subject to a backoff or a timeout.
+
+Three events are published but no service page documents a subscription to them: `inventory/product-item/reservation-failed`, `payment/payment/payment-processed`, and `order/order-compensation/created`.
+
+:::
