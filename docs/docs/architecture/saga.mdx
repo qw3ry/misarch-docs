@@ -52,10 +52,3 @@ Errors that will not resolve by retrying are communicated explicitly, as a dedic
 
 Because each step commits locally and the outcome travels as an event, the participating services are not consistent with each other for the duration of the saga, and in particular while a compensation is still propagating. This is an accepted consequence of the loosely coupled, event-based coordination chosen in [ADR-6](/docs/docs/architecture/adr/check-entity-consistency) and [ADR-7](/docs/docs/architecture/adr/saga-and-retry-policy).
 
-:::info
-
-The following are not specified in this documentation and would need to be confirmed against the implementation: the delivery and ordering guarantees of the event bus, whether event consumers are required to be idempotent, and whether retries are subject to a backoff or a timeout.
-
-Three events are published but no service page documents a subscription to them: `inventory/product-item/reservation-failed`, `payment/payment/payment-processed`, and `order/order-compensation/created`.
-
-:::
