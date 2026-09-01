@@ -8,6 +8,15 @@ import CustomImage from "@site/src/components/CustomImage";
 
 In the following, the most important business processes are modeled using BPMN.
 
+:::note
+
+These models describe the intended business processes, not the way the services coordinate them at runtime.
+The buy process below shows its steps in parallel with a joining gateway, and compensation handled centrally.
+The implementation is event-based and essentially linear, and compensation is triggered by the service that detected the failure.
+See [Order Saga and Failure Model](/docs/docs/architecture/saga) for how the buy process is actually coordinated.
+
+:::
+
 ## Buy Process
 
 <CustomImage path="/renderedDiagrams/buyBPMN" width="1910" height="1365" />
