@@ -1,2 +1,616 @@
 <?xml version='1.0' encoding='utf-8'?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_Buy_Reconstructed" targetNamespace="http://bpmn.io/schema/bpmn"><bpmn:message id="Message_overview_request" name="Request Overview" /><bpmn:message id="Message_overview" name="Order Overview" /><bpmn:message id="Message_order" name="Order" /><bpmn:message id="Message_confirmation" name="Order Confirmation" /><bpmn:message id="Message_rejection" name="Order Rejection" /><bpmn:collaboration id="Collaboration_Buy"><bpmn:participant id="Participant_Customer" name="Customer" processRef="Process_Customer" /><bpmn:participant id="Participant_Shop" name="Shop" processRef="Process_Shop" /><bpmn:messageFlow id="MF_Request" sourceRef="C_Request" targetRef="S_Start" /><bpmn:messageFlow id="MF_Overview" sourceRef="S_Overview" targetRef="C_Overview" /><bpmn:messageFlow id="MF_Order" sourceRef="C_SendOrder" targetRef="S_Order" /><bpmn:messageFlow id="MF_Confirm" sourceRef="S_Confirm" targetRef="C_Confirmation" /><bpmn:messageFlow id="MF_EarlyReject" sourceRef="S_EarlyReject" targetRef="C_EarlyReject" /><bpmn:messageFlow id="MF_OrderReject" sourceRef="S_OrderReject" targetRef="C_OrderReject" /></bpmn:collaboration><bpmn:process id="Process_Customer" isExecutable="false"><bpmn:startEvent id="C_Start" /><bpmn:task id="C_Choose" name="Choose Products" /><bpmn:task id="C_AddCart" name="Add Products to Cart" /><bpmn:intermediateThrowEvent id="C_Request" name="Request Overview"><bpmn:messageEventDefinition messageRef="Message_overview_request" /></bpmn:intermediateThrowEvent><bpmn:exclusiveGateway id="C_GatewayOverview" /><bpmn:intermediateCatchEvent id="C_EarlyReject" name="Order Rejection"><bpmn:messageEventDefinition messageRef="Message_rejection" /></bpmn:intermediateCatchEvent><bpmn:endEvent id="C_EndEarlyReject" /><bpmn:intermediateCatchEvent id="C_Overview" name="Order Overview Arrived"><bpmn:messageEventDefinition messageRef="Message_overview" /></bpmn:intermediateCatchEvent><bpmn:task id="C_Select" name="Select Payment and Delivery Method" /><bpmn:intermediateThrowEvent id="C_SendOrder" name="Send Order"><bpmn:messageEventDefinition messageRef="Message_order" /></bpmn:intermediateThrowEvent><bpmn:exclusiveGateway id="C_GatewayOrder" /><bpmn:intermediateCatchEvent id="C_OrderReject" name="Order Rejection"><bpmn:messageEventDefinition messageRef="Message_rejection" /></bpmn:intermediateCatchEvent><bpmn:endEvent id="C_EndOrderReject" /><bpmn:intermediateCatchEvent id="C_Confirmation" name="Order Confirmation"><bpmn:messageEventDefinition messageRef="Message_confirmation" /></bpmn:intermediateCatchEvent><bpmn:task id="C_Wait" name="Wait for Delivery" /><bpmn:endEvent id="C_EndDelivered" /><bpmn:sequenceFlow id="C_F1" sourceRef="C_Start" targetRef="C_Choose" /><bpmn:sequenceFlow id="C_F2" sourceRef="C_Choose" targetRef="C_AddCart" /><bpmn:sequenceFlow id="C_F3" sourceRef="C_AddCart" targetRef="C_Request" /><bpmn:sequenceFlow id="C_F4" sourceRef="C_Request" targetRef="C_GatewayOverview" /><bpmn:sequenceFlow id="C_F5" sourceRef="C_GatewayOverview" targetRef="C_EarlyReject" name="rejected" /><bpmn:sequenceFlow id="C_F6" sourceRef="C_EarlyReject" targetRef="C_EndEarlyReject" /><bpmn:sequenceFlow id="C_F7" sourceRef="C_GatewayOverview" targetRef="C_Overview" name="accepted" /><bpmn:sequenceFlow id="C_F8" sourceRef="C_Overview" targetRef="C_Select" /><bpmn:sequenceFlow id="C_F9" sourceRef="C_Select" targetRef="C_SendOrder" /><bpmn:sequenceFlow id="C_F10" sourceRef="C_SendOrder" targetRef="C_GatewayOrder" /><bpmn:sequenceFlow id="C_F11" sourceRef="C_GatewayOrder" targetRef="C_OrderReject" name="rejected" /><bpmn:sequenceFlow id="C_F12" sourceRef="C_OrderReject" targetRef="C_EndOrderReject" /><bpmn:sequenceFlow id="C_F13" sourceRef="C_GatewayOrder" targetRef="C_Confirmation" name="confirmed" /><bpmn:sequenceFlow id="C_F14" sourceRef="C_Confirmation" targetRef="C_Wait" /><bpmn:sequenceFlow id="C_F15" sourceRef="C_Wait" targetRef="C_EndDelivered" /></bpmn:process><bpmn:process id="Process_Shop" isExecutable="false"><bpmn:startEvent id="S_Start" name="Request Overview"><bpmn:messageEventDefinition messageRef="Message_overview_request" /></bpmn:startEvent><bpmn:task id="S_Check" name="Check Customer and Order Data" /><bpmn:task id="S_Calc" name="Calculate Final Price" /><bpmn:intermediateThrowEvent id="S_Overview" name="Send Order Overview"><bpmn:messageEventDefinition messageRef="Message_overview" /></bpmn:intermediateThrowEvent><bpmn:intermediateCatchEvent id="S_Order" name="Order Arrived"><bpmn:messageEventDefinition messageRef="Message_order" /></bpmn:intermediateCatchEvent><bpmn:task id="S_Reserve" name="Reserve Inventory" /><bpmn:task id="S_Create" name="Create Order"><bpmn:dataOutputAssociation id="S_OrderAssoc"><bpmn:targetRef>S_OrderObject</bpmn:targetRef></bpmn:dataOutputAssociation></bpmn:task><bpmn:intermediateThrowEvent id="S_Confirm" name="Confirm Order"><bpmn:messageEventDefinition messageRef="Message_confirmation" /></bpmn:intermediateThrowEvent><bpmn:subProcess id="S_Process" name="Process Order" /><bpmn:task id="S_Receipt" name="Generate Receipt"><bpmn:dataOutputAssociation id="S_ReceiptAssoc"><bpmn:targetRef>S_ReceiptObject</bpmn:targetRef></bpmn:dataOutputAssociation></bpmn:task><bpmn:endEvent id="S_End" /><bpmn:boundaryEvent id="S_CheckError" attachedToRef="S_Check"><bpmn:errorEventDefinition /></bpmn:boundaryEvent><bpmn:intermediateThrowEvent id="S_EarlyReject" name="Transmit Order Cancellation"><bpmn:messageEventDefinition messageRef="Message_rejection" /></bpmn:intermediateThrowEvent><bpmn:endEvent id="S_EarlyRejectEnd" /><bpmn:boundaryEvent id="S_ReserveError" attachedToRef="S_Reserve"><bpmn:errorEventDefinition /></bpmn:boundaryEvent><bpmn:intermediateThrowEvent id="S_OrderReject" name="Transmit Order Cancellation"><bpmn:messageEventDefinition messageRef="Message_rejection" /></bpmn:intermediateThrowEvent><bpmn:endEvent id="S_OrderRejectEnd" /><bpmn:sequenceFlow id="S_F1" sourceRef="S_Start" targetRef="S_Check" /><bpmn:sequenceFlow id="S_F2" sourceRef="S_Check" targetRef="S_Calc" /><bpmn:sequenceFlow id="S_F3" sourceRef="S_Calc" targetRef="S_Overview" /><bpmn:sequenceFlow id="S_F4" sourceRef="S_Overview" targetRef="S_Order" /><bpmn:sequenceFlow id="S_F5" sourceRef="S_Order" targetRef="S_Reserve" /><bpmn:sequenceFlow id="S_F6" sourceRef="S_Reserve" targetRef="S_Create" /><bpmn:sequenceFlow id="S_F7" sourceRef="S_Create" targetRef="S_Confirm" /><bpmn:sequenceFlow id="S_F8" sourceRef="S_Confirm" targetRef="S_Process" /><bpmn:sequenceFlow id="S_F9" sourceRef="S_Process" targetRef="S_Receipt" /><bpmn:sequenceFlow id="S_F10" sourceRef="S_Receipt" targetRef="S_End" /><bpmn:sequenceFlow id="S_E1" sourceRef="S_CheckError" targetRef="S_EarlyReject" /><bpmn:sequenceFlow id="S_E2" sourceRef="S_EarlyReject" targetRef="S_EarlyRejectEnd" /><bpmn:sequenceFlow id="S_E3" sourceRef="S_ReserveError" targetRef="S_OrderReject" /><bpmn:sequenceFlow id="S_E4" sourceRef="S_OrderReject" targetRef="S_OrderRejectEnd" /><bpmn:dataObject id="Data_Order" /><bpmn:dataObjectReference id="S_OrderObject" name="Order" dataObjectRef="Data_Order" /><bpmn:dataObject id="Data_Receipt" /><bpmn:dataObjectReference id="S_ReceiptObject" name="Receipt" dataObjectRef="Data_Receipt" /><bpmn:subProcess id="S_PaymentSub" name="Process Order"><bpmn:startEvent id="P_Start" /><bpmn:parallelGateway id="P_Split" /><bpmn:task id="P_Refund" isForCompensation="true" name="Refund Payment" /><bpmn:task id="P_Capture" name="Capture Payment" /><bpmn:boundaryEvent id="P_CaptureComp" attachedToRef="P_Capture"><bpmn:compensateEventDefinition /></bpmn:boundaryEvent><bpmn:boundaryEvent id="P_CaptureError" attachedToRef="P_Capture"><bpmn:errorEventDefinition /></bpmn:boundaryEvent><bpmn:task id="P_Debt" name="Transfer Debt to Inkasso" /><bpmn:task id="P_Invoice" name="Generate Invoice" /><bpmn:subProcess id="P_Ship" name="Ship Products" /><bpmn:boundaryEvent id="P_ShipError" attachedToRef="P_Ship"><bpmn:errorEventDefinition /></bpmn:boundaryEvent><bpmn:parallelGateway id="P_Merge" /><bpmn:endEvent id="P_End" /><bpmn:intermediateThrowEvent id="P_Compensate" name="Compensate Payment"><bpmn:compensateEventDefinition /></bpmn:intermediateThrowEvent><bpmn:sequenceFlow id="P_F1" sourceRef="P_Start" targetRef="P_Split" /><bpmn:sequenceFlow id="P_F2" sourceRef="P_Split" targetRef="P_Capture" /><bpmn:sequenceFlow id="P_F3" sourceRef="P_Split" targetRef="P_Invoice" /><bpmn:sequenceFlow id="P_F4" sourceRef="P_Split" targetRef="P_Ship" /><bpmn:sequenceFlow id="P_F5" sourceRef="P_Capture" targetRef="P_Merge" /><bpmn:sequenceFlow id="P_F6" sourceRef="P_CaptureError" targetRef="P_Debt" /><bpmn:sequenceFlow id="P_F8" sourceRef="P_Invoice" targetRef="P_Merge" /><bpmn:sequenceFlow id="P_F9" sourceRef="P_Ship" targetRef="P_Merge" /><bpmn:sequenceFlow id="P_F10" sourceRef="P_Merge" targetRef="P_End" /><bpmn:sequenceFlow id="P_F11" sourceRef="P_ShipError" targetRef="P_Compensate" /><bpmn:association id="P_CompAssoc" sourceRef="P_CaptureComp" targetRef="P_Refund" associationDirection="One" /></bpmn:subProcess><bpmn:subProcess id="S_ShippingSub" name="Ship Products"><bpmn:startEvent id="H_Start" /><bpmn:task id="H_Inform" name="Inform Logistic Partner" /><bpmn:task id="H_Package" name="Package Products" /><bpmn:intermediateCatchEvent id="H_Status" name="New Status from logistic partner"><bpmn:messageEventDefinition /></bpmn:intermediateCatchEvent><bpmn:exclusiveGateway id="H_Arrived" name="Package arrived at customer?" /><bpmn:task id="H_Update" name="Update Shipping State" /><bpmn:task id="H_SetArrived" name="Set Shipping State to Arrived" /><bpmn:endEvent id="H_End" /><bpmn:sequenceFlow id="H_F1" sourceRef="H_Start" targetRef="H_Inform" /><bpmn:sequenceFlow id="H_F2" sourceRef="H_Inform" targetRef="H_Package" /><bpmn:sequenceFlow id="H_F3" sourceRef="H_Package" targetRef="H_Status" /><bpmn:sequenceFlow id="H_F4" sourceRef="H_Status" targetRef="H_Arrived" /><bpmn:sequenceFlow id="H_F5" sourceRef="H_Arrived" targetRef="H_Update" name="no" /><bpmn:sequenceFlow id="H_F6" sourceRef="H_Update" targetRef="H_Status" /><bpmn:sequenceFlow id="H_F7" sourceRef="H_Arrived" targetRef="H_SetArrived" name="yes" /><bpmn:sequenceFlow id="H_F8" sourceRef="H_SetArrived" targetRef="H_End" /></bpmn:subProcess></bpmn:process><bpmndi:BPMNDiagram id="Diagram_Buy"><bpmndi:BPMNPlane id="Plane_Buy" bpmnElement="Collaboration_Buy"><bpmndi:BPMNShape id="Participant_Customer_di" bpmnElement="Participant_Customer" isHorizontal="true"><dc:Bounds x="160" y="85" width="1628" height="250" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="Participant_Shop_di" bpmnElement="Participant_Shop" isHorizontal="true"><dc:Bounds x="160" y="400" width="1900" height="1040" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="C_Start_di" bpmnElement="C_Start"><dc:Bounds x="222" y="192" width="36" height="36" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="C_Choose_di" bpmnElement="C_Choose"><dc:Bounds x="310" y="170" width="100" height="80" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="C_AddCart_di" bpmnElement="C_AddCart"><dc:Bounds x="470" y="170" width="100" height="80" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="C_Request_di" bpmnElement="C_Request"><dc:Bounds x="612" y="192" width="36" height="36" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="C_GatewayOverview_di" bpmnElement="C_GatewayOverview"><dc:Bounds x="725" y="185" width="50" height="50" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="C_EarlyReject_di" bpmnElement="C_EarlyReject"><dc:Bounds x="802" y="112" width="36" height="36" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="C_EndEarlyReject_di" bpmnElement="C_EndEarlyReject"><dc:Bounds x="1002" y="112" width="36" height="36" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="C_Overview_di" bpmnElement="C_Overview"><dc:Bounds x="872" y="192" width="36" height="36" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="C_Select_di" bpmnElement="C_Select"><dc:Bounds x="950" y="170" width="100" height="80" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="C_SendOrder_di" bpmnElement="C_SendOrder"><dc:Bounds x="1132" y="192" width="36" height="36" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="C_GatewayOrder_di" bpmnElement="C_GatewayOrder"><dc:Bounds x="1255" y="185" width="50" height="50" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="C_OrderReject_di" bpmnElement="C_OrderReject"><dc:Bounds x="1422" y="112" width="36" height="36" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="C_EndOrderReject_di" bpmnElement="C_EndOrderReject"><dc:Bounds x="1532" y="112" width="36" height="36" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="C_Confirmation_di" bpmnElement="C_Confirmation"><dc:Bounds x="1372" y="272" width="36" height="36" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="C_Wait_di" bpmnElement="C_Wait"><dc:Bounds x="1480" y="250" width="100" height="80" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="C_EndDelivered_di" bpmnElement="C_EndDelivered"><dc:Bounds x="1652" y="272" width="36" height="36" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="S_Start_di" bpmnElement="S_Start"><dc:Bounds x="210" y="522" width="36" height="36" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="S_Check_di" bpmnElement="S_Check"><dc:Bounds x="298" y="500" width="100" height="80" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="S_Calc_di" bpmnElement="S_Calc"><dc:Bounds x="470" y="500" width="100" height="80" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="S_Overview_di" bpmnElement="S_Overview"><dc:Bounds x="642" y="522" width="36" height="36" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="S_Order_di" bpmnElement="S_Order"><dc:Bounds x="732" y="522" width="36" height="36" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="S_Reserve_di" bpmnElement="S_Reserve"><dc:Bounds x="830" y="500" width="100" height="80" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="S_Create_di" bpmnElement="S_Create"><dc:Bounds x="1000" y="500" width="100" height="80" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="S_OrderObject_di" bpmnElement="S_OrderObject"><dc:Bounds x="1032" y="615" width="36" height="50" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="S_Confirm_di" bpmnElement="S_Confirm"><dc:Bounds x="1192" y="522" width="36" height="36" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="S_Process_di" bpmnElement="S_Process" isExpanded="false"><dc:Bounds x="1310" y="500" width="100" height="80" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="S_Receipt_di" bpmnElement="S_Receipt"><dc:Bounds x="1480" y="500" width="100" height="80" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="S_ReceiptObject_di" bpmnElement="S_ReceiptObject"><dc:Bounds x="1512" y="615" width="36" height="50" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="S_End_di" bpmnElement="S_End"><dc:Bounds x="1652" y="522" width="36" height="36" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="S_CheckError_di" bpmnElement="S_CheckError"><dc:Bounds x="332" y="562" width="36" height="36" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="S_EarlyReject_di" bpmnElement="S_EarlyReject"><dc:Bounds x="582" y="752" width="36" height="36" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="S_EarlyRejectEnd_di" bpmnElement="S_EarlyRejectEnd"><dc:Bounds x="732" y="752" width="36" height="36" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="S_ReserveError_di" bpmnElement="S_ReserveError"><dc:Bounds x="862" y="562" width="36" height="36" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="S_OrderReject_di" bpmnElement="S_OrderReject"><dc:Bounds x="1262" y="752" width="36" height="36" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="S_OrderRejectEnd_di" bpmnElement="S_OrderRejectEnd"><dc:Bounds x="1452" y="752" width="36" height="36" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="S_PaymentSub_di" bpmnElement="S_PaymentSub" isExpanded="true"><dc:Bounds x="300" y="870" width="570" height="550" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="P_Start_di" bpmnElement="P_Start"><dc:Bounds x="340" y="1152" width="36" height="36" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="P_Split_di" bpmnElement="P_Split"><dc:Bounds x="435" y="1145" width="50" height="50" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="P_Refund_di" bpmnElement="P_Refund"><dc:Bounds x="450" y="900" width="100" height="80" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="P_Capture_di" bpmnElement="P_Capture"><dc:Bounds x="550" y="1020" width="100" height="80" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="P_CaptureComp_di" bpmnElement="P_CaptureComp"><dc:Bounds x="552" y="1002" width="36" height="36" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="P_CaptureError_di" bpmnElement="P_CaptureError"><dc:Bounds x="602" y="1002" width="36" height="36" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="P_Debt_di" bpmnElement="P_Debt"><dc:Bounds x="690" y="900" width="100" height="80" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="P_Invoice_di" bpmnElement="P_Invoice"><dc:Bounds x="550" y="1130" width="100" height="80" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="P_Ship_di" bpmnElement="P_Ship" isExpanded="false"><dc:Bounds x="550" y="1240" width="100" height="80" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="P_ShipError_di" bpmnElement="P_ShipError"><dc:Bounds x="552" y="1302" width="36" height="36" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="P_Merge_di" bpmnElement="P_Merge"><dc:Bounds x="695" y="1145" width="50" height="50" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="P_End_di" bpmnElement="P_End"><dc:Bounds x="772" y="1152" width="36" height="36" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="P_Compensate_di" bpmnElement="P_Compensate"><dc:Bounds x="672" y="1340" width="36" height="36" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="S_ShippingSub_di" bpmnElement="S_ShippingSub" isExpanded="true"><dc:Bounds x="1050" y="990" width="990" height="340" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="H_Start_di" bpmnElement="H_Start"><dc:Bounds x="1090" y="1102" width="36" height="36" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="H_Inform_di" bpmnElement="H_Inform"><dc:Bounds x="1200" y="1080" width="100" height="80" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="H_Package_di" bpmnElement="H_Package"><dc:Bounds x="1360" y="1080" width="100" height="80" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="H_Status_di" bpmnElement="H_Status"><dc:Bounds x="1522" y="1102" width="36" height="36" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="H_Arrived_di" bpmnElement="H_Arrived"><dc:Bounds x="1625" y="1095" width="50" height="50" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="H_Update_di" bpmnElement="H_Update"><dc:Bounds x="1600" y="1190" width="100" height="80" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="H_SetArrived_di" bpmnElement="H_SetArrived"><dc:Bounds x="1750" y="1020" width="100" height="80" /></bpmndi:BPMNShape><bpmndi:BPMNShape id="H_End_di" bpmnElement="H_End"><dc:Bounds x="1982" y="1042" width="36" height="36" /></bpmndi:BPMNShape><bpmndi:BPMNEdge id="C_F1_di" bpmnElement="C_F1"><di:waypoint x="258" y="210" /><di:waypoint x="310" y="210" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="C_F2_di" bpmnElement="C_F2"><di:waypoint x="410" y="210" /><di:waypoint x="470" y="210" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="C_F3_di" bpmnElement="C_F3"><di:waypoint x="570" y="210" /><di:waypoint x="612" y="210" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="C_F4_di" bpmnElement="C_F4"><di:waypoint x="648" y="210" /><di:waypoint x="725" y="210" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="C_F5_di" bpmnElement="C_F5"><di:waypoint x="750" y="185" /><di:waypoint x="750" y="130" /><di:waypoint x="802" y="130" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="C_F6_di" bpmnElement="C_F6"><di:waypoint x="838" y="130" /><di:waypoint x="1002" y="130" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="C_F7_di" bpmnElement="C_F7"><di:waypoint x="775" y="210" /><di:waypoint x="872" y="210" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="C_F8_di" bpmnElement="C_F8"><di:waypoint x="908" y="210" /><di:waypoint x="950" y="210" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="C_F9_di" bpmnElement="C_F9"><di:waypoint x="1050" y="210" /><di:waypoint x="1132" y="210" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="C_F10_di" bpmnElement="C_F10"><di:waypoint x="1168" y="210" /><di:waypoint x="1255" y="210" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="C_F11_di" bpmnElement="C_F11"><di:waypoint x="1280" y="185" /><di:waypoint x="1280" y="130" /><di:waypoint x="1422" y="130" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="C_F12_di" bpmnElement="C_F12"><di:waypoint x="1458" y="130" /><di:waypoint x="1532" y="130" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="C_F13_di" bpmnElement="C_F13"><di:waypoint x="1280" y="235" /><di:waypoint x="1280" y="290" /><di:waypoint x="1372" y="290" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="C_F14_di" bpmnElement="C_F14"><di:waypoint x="1408" y="290" /><di:waypoint x="1480" y="290" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="C_F15_di" bpmnElement="C_F15"><di:waypoint x="1580" y="290" /><di:waypoint x="1652" y="290" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="S_F1_di" bpmnElement="S_F1"><di:waypoint x="246" y="540" /><di:waypoint x="298" y="540" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="S_F2_di" bpmnElement="S_F2"><di:waypoint x="398" y="540" /><di:waypoint x="470" y="540" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="S_F3_di" bpmnElement="S_F3"><di:waypoint x="570" y="540" /><di:waypoint x="642" y="540" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="S_F4_di" bpmnElement="S_F4"><di:waypoint x="678" y="540" /><di:waypoint x="732" y="540" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="S_F5_di" bpmnElement="S_F5"><di:waypoint x="768" y="540" /><di:waypoint x="830" y="540" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="S_F6_di" bpmnElement="S_F6"><di:waypoint x="930" y="540" /><di:waypoint x="1000" y="540" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="S_F7_di" bpmnElement="S_F7"><di:waypoint x="1100" y="540" /><di:waypoint x="1192" y="540" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="S_F8_di" bpmnElement="S_F8"><di:waypoint x="1228" y="540" /><di:waypoint x="1310" y="540" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="S_F9_di" bpmnElement="S_F9"><di:waypoint x="1410" y="540" /><di:waypoint x="1480" y="540" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="S_F10_di" bpmnElement="S_F10"><di:waypoint x="1580" y="540" /><di:waypoint x="1652" y="540" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="S_E1_di" bpmnElement="S_E1"><di:waypoint x="350" y="598" /><di:waypoint x="350" y="770" /><di:waypoint x="582" y="770" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="S_E2_di" bpmnElement="S_E2"><di:waypoint x="618" y="770" /><di:waypoint x="732" y="770" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="S_E3_di" bpmnElement="S_E3"><di:waypoint x="880" y="598" /><di:waypoint x="880" y="770" /><di:waypoint x="1262" y="770" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="S_E4_di" bpmnElement="S_E4"><di:waypoint x="1298" y="770" /><di:waypoint x="1452" y="770" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="P_F1_di" bpmnElement="P_F1"><di:waypoint x="376" y="1170" /><di:waypoint x="435" y="1170" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="P_F2_di" bpmnElement="P_F2"><di:waypoint x="460" y="1145" /><di:waypoint x="460" y="1060" /><di:waypoint x="550" y="1060" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="P_F3_di" bpmnElement="P_F3"><di:waypoint x="485" y="1170" /><di:waypoint x="550" y="1170" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="P_F4_di" bpmnElement="P_F4"><di:waypoint x="460" y="1195" /><di:waypoint x="460" y="1280" /><di:waypoint x="550" y="1280" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="P_F5_di" bpmnElement="P_F5"><di:waypoint x="650" y="1060" /><di:waypoint x="720" y="1060" /><di:waypoint x="720" y="1145" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="P_F6_di" bpmnElement="P_F6"><di:waypoint x="620" y="1002" /><di:waypoint x="620" y="940" /><di:waypoint x="690" y="940" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="P_F8_di" bpmnElement="P_F8"><di:waypoint x="650" y="1170" /><di:waypoint x="695" y="1170" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="P_F9_di" bpmnElement="P_F9"><di:waypoint x="650" y="1280" /><di:waypoint x="720" y="1280" /><di:waypoint x="720" y="1195" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="P_F10_di" bpmnElement="P_F10"><di:waypoint x="745" y="1170" /><di:waypoint x="772" y="1170" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="P_F11_di" bpmnElement="P_F11"><di:waypoint x="570" y="1338" /><di:waypoint x="570" y="1358" /><di:waypoint x="672" y="1358" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="P_CompAssoc_di" bpmnElement="P_CompAssoc"><di:waypoint x="570" y="1002" /><di:waypoint x="570" y="940" /><di:waypoint x="550" y="940" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="H_F1_di" bpmnElement="H_F1"><di:waypoint x="1126" y="1120" /><di:waypoint x="1200" y="1120" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="H_F2_di" bpmnElement="H_F2"><di:waypoint x="1300" y="1120" /><di:waypoint x="1360" y="1120" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="H_F3_di" bpmnElement="H_F3"><di:waypoint x="1460" y="1120" /><di:waypoint x="1522" y="1120" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="H_F4_di" bpmnElement="H_F4"><di:waypoint x="1558" y="1120" /><di:waypoint x="1625" y="1120" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="H_F5_di" bpmnElement="H_F5"><di:waypoint x="1650" y="1145" /><di:waypoint x="1650" y="1190" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="H_F6_di" bpmnElement="H_F6"><di:waypoint x="1600" y="1230" /><di:waypoint x="1540" y="1230" /><di:waypoint x="1540" y="1138" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="H_F7_di" bpmnElement="H_F7"><di:waypoint x="1650" y="1095" /><di:waypoint x="1650" y="1060" /><di:waypoint x="1750" y="1060" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="H_F8_di" bpmnElement="H_F8"><di:waypoint x="1850" y="1060" /><di:waypoint x="1982" y="1060" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="MF_Request_di" bpmnElement="MF_Request"><di:waypoint x="630" y="228" /><di:waypoint x="630" y="340" /><di:waypoint x="228" y="340" /><di:waypoint x="228" y="522" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="MF_Overview_di" bpmnElement="MF_Overview"><di:waypoint x="660" y="522" /><di:waypoint x="660" y="360" /><di:waypoint x="890" y="360" /><di:waypoint x="890" y="228" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="MF_Order_di" bpmnElement="MF_Order"><di:waypoint x="1150" y="228" /><di:waypoint x="1150" y="370" /><di:waypoint x="750" y="370" /><di:waypoint x="750" y="522" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="MF_Confirm_di" bpmnElement="MF_Confirm"><di:waypoint x="1210" y="522" /><di:waypoint x="1210" y="380" /><di:waypoint x="1390" y="380" /><di:waypoint x="1390" y="308" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="MF_EarlyReject_di" bpmnElement="MF_EarlyReject"><di:waypoint x="600" y="752" /><di:waypoint x="600" y="350" /><di:waypoint x="820" y="350" /><di:waypoint x="820" y="148" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="MF_OrderReject_di" bpmnElement="MF_OrderReject"><di:waypoint x="1280" y="752" /><di:waypoint x="1280" y="390" /><di:waypoint x="1440" y="390" /><di:waypoint x="1440" y="148" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="S_OrderAssoc_di" bpmnElement="S_OrderAssoc"><di:waypoint x="1050" y="580" /><di:waypoint x="1050" y="615" /></bpmndi:BPMNEdge><bpmndi:BPMNEdge id="S_ReceiptAssoc_di" bpmnElement="S_ReceiptAssoc"><di:waypoint x="1530" y="580" /><di:waypoint x="1530" y="615" /></bpmndi:BPMNEdge></bpmndi:BPMNPlane></bpmndi:BPMNDiagram></bpmn:definitions>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                  id="Definitions_Buy_Reconstructed" targetNamespace="http://bpmn.io/schema/bpmn">
+    <bpmn:message id="Message_overview_request" name="Request Overview"/>
+    <bpmn:message id="Message_overview" name="Order Overview"/>
+    <bpmn:message id="Message_order" name="Order"/>
+    <bpmn:message id="Message_confirmation" name="Order Confirmation"/>
+    <bpmn:message id="Message_rejection" name="Order Rejection"/>
+    <bpmn:collaboration id="Collaboration_Buy">
+        <bpmn:participant id="Participant_Customer" name="Customer" processRef="Process_Customer"/>
+        <bpmn:participant id="Participant_Shop" name="Shop" processRef="Process_Shop"/>
+        <bpmn:messageFlow id="MF_Request" sourceRef="C_Request" targetRef="S_Start"/>
+        <bpmn:messageFlow id="MF_Overview" sourceRef="S_Overview" targetRef="C_Overview"/>
+        <bpmn:messageFlow id="MF_Order" sourceRef="C_SendOrder" targetRef="S_Order"/>
+        <bpmn:messageFlow id="MF_Confirm" sourceRef="S_Confirm" targetRef="C_Confirmation"/>
+        <bpmn:messageFlow id="MF_EarlyReject" sourceRef="S_EarlyReject" targetRef="C_EarlyReject"/>
+        <bpmn:messageFlow id="MF_OrderReject" sourceRef="S_OrderReject" targetRef="C_OrderReject"/>
+    </bpmn:collaboration>
+    <bpmn:process id="Process_Customer" isExecutable="false">
+        <bpmn:startEvent id="C_Start"/>
+        <bpmn:task id="C_Choose" name="Choose Products"/>
+        <bpmn:task id="C_AddCart" name="Add Products to Cart"/>
+        <bpmn:intermediateThrowEvent id="C_Request" name="Request Overview">
+            <bpmn:messageEventDefinition messageRef="Message_overview_request"/>
+        </bpmn:intermediateThrowEvent>
+        <bpmn:exclusiveGateway id="C_GatewayOverview"/>
+        <bpmn:intermediateCatchEvent id="C_EarlyReject" name="Order Rejection">
+            <bpmn:messageEventDefinition messageRef="Message_rejection"/>
+        </bpmn:intermediateCatchEvent>
+        <bpmn:endEvent id="C_EndEarlyReject"/>
+        <bpmn:intermediateCatchEvent id="C_Overview" name="Order Overview Arrived">
+            <bpmn:messageEventDefinition messageRef="Message_overview"/>
+        </bpmn:intermediateCatchEvent>
+        <bpmn:task id="C_Select" name="Select Payment and Delivery Method"/>
+        <bpmn:intermediateThrowEvent id="C_SendOrder" name="Send Order">
+            <bpmn:messageEventDefinition messageRef="Message_order"/>
+        </bpmn:intermediateThrowEvent>
+        <bpmn:exclusiveGateway id="C_GatewayOrder"/>
+        <bpmn:intermediateCatchEvent id="C_OrderReject" name="Order Rejection">
+            <bpmn:messageEventDefinition messageRef="Message_rejection"/>
+        </bpmn:intermediateCatchEvent>
+        <bpmn:endEvent id="C_EndOrderReject"/>
+        <bpmn:intermediateCatchEvent id="C_Confirmation" name="Order Confirmation">
+            <bpmn:messageEventDefinition messageRef="Message_confirmation"/>
+        </bpmn:intermediateCatchEvent>
+        <bpmn:task id="C_Wait" name="Wait for Delivery"/>
+        <bpmn:endEvent id="C_EndDelivered"/>
+        <bpmn:sequenceFlow id="C_F1" sourceRef="C_Start" targetRef="C_Choose"/>
+        <bpmn:sequenceFlow id="C_F2" sourceRef="C_Choose" targetRef="C_AddCart"/>
+        <bpmn:sequenceFlow id="C_F3" sourceRef="C_AddCart" targetRef="C_Request"/>
+        <bpmn:sequenceFlow id="C_F4" sourceRef="C_Request" targetRef="C_GatewayOverview"/>
+        <bpmn:sequenceFlow id="C_F5" sourceRef="C_GatewayOverview" targetRef="C_EarlyReject" name="rejected"/>
+        <bpmn:sequenceFlow id="C_F6" sourceRef="C_EarlyReject" targetRef="C_EndEarlyReject"/>
+        <bpmn:sequenceFlow id="C_F7" sourceRef="C_GatewayOverview" targetRef="C_Overview" name="accepted"/>
+        <bpmn:sequenceFlow id="C_F8" sourceRef="C_Overview" targetRef="C_Select"/>
+        <bpmn:sequenceFlow id="C_F9" sourceRef="C_Select" targetRef="C_SendOrder"/>
+        <bpmn:sequenceFlow id="C_F10" sourceRef="C_SendOrder" targetRef="C_GatewayOrder"/>
+        <bpmn:sequenceFlow id="C_F11" sourceRef="C_GatewayOrder" targetRef="C_OrderReject" name="rejected"/>
+        <bpmn:sequenceFlow id="C_F12" sourceRef="C_OrderReject" targetRef="C_EndOrderReject"/>
+        <bpmn:sequenceFlow id="C_F13" sourceRef="C_GatewayOrder" targetRef="C_Confirmation" name="confirmed"/>
+        <bpmn:sequenceFlow id="C_F14" sourceRef="C_Confirmation" targetRef="C_Wait"/>
+        <bpmn:sequenceFlow id="C_F15" sourceRef="C_Wait" targetRef="C_EndDelivered"/>
+    </bpmn:process>
+    <bpmn:process id="Process_Shop" isExecutable="false">
+        <bpmn:startEvent id="S_Start" name="Request Overview">
+            <bpmn:messageEventDefinition messageRef="Message_overview_request"/>
+        </bpmn:startEvent>
+        <bpmn:task id="S_Check" name="Check Customer and Order Data"/>
+        <bpmn:task id="S_Calc" name="Calculate Final Price"/>
+        <bpmn:intermediateThrowEvent id="S_Overview" name="Send Order Overview">
+            <bpmn:messageEventDefinition messageRef="Message_overview"/>
+        </bpmn:intermediateThrowEvent>
+        <bpmn:intermediateCatchEvent id="S_Order" name="Order Arrived">
+            <bpmn:messageEventDefinition messageRef="Message_order"/>
+        </bpmn:intermediateCatchEvent>
+        <bpmn:task id="S_Reserve" name="Reserve Inventory"/>
+        <bpmn:task id="S_Create" name="Create Order">
+            <bpmn:dataOutputAssociation id="S_OrderAssoc">
+                <bpmn:targetRef>S_OrderObject</bpmn:targetRef>
+            </bpmn:dataOutputAssociation>
+        </bpmn:task>
+        <bpmn:intermediateThrowEvent id="S_Confirm" name="Confirm Order">
+            <bpmn:messageEventDefinition messageRef="Message_confirmation"/>
+        </bpmn:intermediateThrowEvent>
+        <bpmn:subProcess id="S_Process" name="Process Order"/>
+        <bpmn:task id="S_Receipt" name="Generate Receipt">
+            <bpmn:dataOutputAssociation id="S_ReceiptAssoc">
+                <bpmn:targetRef>S_ReceiptObject</bpmn:targetRef>
+            </bpmn:dataOutputAssociation>
+        </bpmn:task>
+        <bpmn:endEvent id="S_End"/>
+        <bpmn:boundaryEvent id="S_CheckError" attachedToRef="S_Check">
+            <bpmn:errorEventDefinition/>
+        </bpmn:boundaryEvent>
+        <bpmn:intermediateThrowEvent id="S_EarlyReject" name="Transmit Order Cancellation">
+            <bpmn:messageEventDefinition messageRef="Message_rejection"/>
+        </bpmn:intermediateThrowEvent>
+        <bpmn:endEvent id="S_EarlyRejectEnd"/>
+        <bpmn:boundaryEvent id="S_ReserveError" attachedToRef="S_Reserve">
+            <bpmn:errorEventDefinition/>
+        </bpmn:boundaryEvent>
+        <bpmn:intermediateThrowEvent id="S_OrderReject" name="Transmit Order Cancellation">
+            <bpmn:messageEventDefinition messageRef="Message_rejection"/>
+        </bpmn:intermediateThrowEvent>
+        <bpmn:endEvent id="S_OrderRejectEnd"/>
+        <bpmn:sequenceFlow id="S_F1" sourceRef="S_Start" targetRef="S_Check"/>
+        <bpmn:sequenceFlow id="S_F2" sourceRef="S_Check" targetRef="S_Calc"/>
+        <bpmn:sequenceFlow id="S_F3" sourceRef="S_Calc" targetRef="S_Overview"/>
+        <bpmn:sequenceFlow id="S_F4" sourceRef="S_Overview" targetRef="S_Order"/>
+        <bpmn:sequenceFlow id="S_F5" sourceRef="S_Order" targetRef="S_Reserve"/>
+        <bpmn:sequenceFlow id="S_F6" sourceRef="S_Reserve" targetRef="S_Create"/>
+        <bpmn:sequenceFlow id="S_F7" sourceRef="S_Create" targetRef="S_Confirm"/>
+        <bpmn:sequenceFlow id="S_F8" sourceRef="S_Confirm" targetRef="S_Process"/>
+        <bpmn:sequenceFlow id="S_F9" sourceRef="S_Process" targetRef="S_Receipt"/>
+        <bpmn:sequenceFlow id="S_F10" sourceRef="S_Receipt" targetRef="S_End"/>
+        <bpmn:sequenceFlow id="S_E1" sourceRef="S_CheckError" targetRef="S_EarlyReject"/>
+        <bpmn:sequenceFlow id="S_E2" sourceRef="S_EarlyReject" targetRef="S_EarlyRejectEnd"/>
+        <bpmn:sequenceFlow id="S_E3" sourceRef="S_ReserveError" targetRef="S_OrderReject"/>
+        <bpmn:sequenceFlow id="S_E4" sourceRef="S_OrderReject" targetRef="S_OrderRejectEnd"/>
+        <bpmn:dataObject id="Data_Order"/>
+        <bpmn:dataObjectReference id="S_OrderObject" name="Order" dataObjectRef="Data_Order"/>
+        <bpmn:dataObject id="Data_Receipt"/>
+        <bpmn:dataObjectReference id="S_ReceiptObject" name="Receipt" dataObjectRef="Data_Receipt"/>
+        <bpmn:subProcess id="S_PaymentSub" name="Process Order">
+            <bpmn:startEvent id="P_Start"/>
+            <bpmn:parallelGateway id="P_Split"/>
+            <bpmn:task id="P_Refund" isForCompensation="true" name="Refund Payment"/>
+            <bpmn:task id="P_Capture" name="Capture Payment"/>
+            <bpmn:boundaryEvent id="P_CaptureComp" attachedToRef="P_Capture">
+                <bpmn:compensateEventDefinition/>
+            </bpmn:boundaryEvent>
+            <bpmn:boundaryEvent id="P_CaptureError" attachedToRef="P_Capture">
+                <bpmn:errorEventDefinition/>
+            </bpmn:boundaryEvent>
+            <bpmn:task id="P_Debt" name="Transfer Debt to Inkasso"/>
+            <bpmn:task id="P_Invoice" name="Generate Invoice"/>
+            <bpmn:subProcess id="P_Ship" name="Ship Products"/>
+            <bpmn:boundaryEvent id="P_ShipError" attachedToRef="P_Ship">
+                <bpmn:errorEventDefinition/>
+            </bpmn:boundaryEvent>
+            <bpmn:parallelGateway id="P_Merge"/>
+            <bpmn:endEvent id="P_End"/>
+            <bpmn:intermediateThrowEvent id="P_Compensate" name="Compensate Payment">
+                <bpmn:compensateEventDefinition/>
+            </bpmn:intermediateThrowEvent>
+            <bpmn:sequenceFlow id="P_F1" sourceRef="P_Start" targetRef="P_Split"/>
+            <bpmn:sequenceFlow id="P_F2" sourceRef="P_Split" targetRef="P_Capture"/>
+            <bpmn:sequenceFlow id="P_F3" sourceRef="P_Split" targetRef="P_Invoice"/>
+            <bpmn:sequenceFlow id="P_F4" sourceRef="P_Split" targetRef="P_Ship"/>
+            <bpmn:sequenceFlow id="P_F5" sourceRef="P_Capture" targetRef="P_Merge"/>
+            <bpmn:sequenceFlow id="P_F6" sourceRef="P_CaptureError" targetRef="P_Debt"/>
+            <bpmn:sequenceFlow id="P_F8" sourceRef="P_Invoice" targetRef="P_Merge"/>
+            <bpmn:sequenceFlow id="P_F9" sourceRef="P_Ship" targetRef="P_Merge"/>
+            <bpmn:sequenceFlow id="P_F10" sourceRef="P_Merge" targetRef="P_End"/>
+            <bpmn:sequenceFlow id="P_F11" sourceRef="P_ShipError" targetRef="P_Compensate"/>
+            <bpmn:association id="P_CompAssoc" sourceRef="P_CaptureComp" targetRef="P_Refund"
+                              associationDirection="One"/>
+        </bpmn:subProcess>
+        <bpmn:subProcess id="S_ShippingSub" name="Ship Products">
+            <bpmn:startEvent id="H_Start"/>
+            <bpmn:task id="H_Inform" name="Inform Logistic Partner"/>
+            <bpmn:task id="H_Package" name="Package Products"/>
+            <bpmn:intermediateCatchEvent id="H_Status" name="New Status from logistic partner">
+                <bpmn:messageEventDefinition/>
+            </bpmn:intermediateCatchEvent>
+            <bpmn:exclusiveGateway id="H_Arrived" name="Package arrived at customer?"/>
+            <bpmn:task id="H_Update" name="Update Shipping State"/>
+            <bpmn:task id="H_SetArrived" name="Set Shipping State to Arrived"/>
+            <bpmn:endEvent id="H_End"/>
+            <bpmn:sequenceFlow id="H_F1" sourceRef="H_Start" targetRef="H_Inform"/>
+            <bpmn:sequenceFlow id="H_F2" sourceRef="H_Inform" targetRef="H_Package"/>
+            <bpmn:sequenceFlow id="H_F3" sourceRef="H_Package" targetRef="H_Status"/>
+            <bpmn:sequenceFlow id="H_F4" sourceRef="H_Status" targetRef="H_Arrived"/>
+            <bpmn:sequenceFlow id="H_F5" sourceRef="H_Arrived" targetRef="H_Update" name="no"/>
+            <bpmn:sequenceFlow id="H_F6" sourceRef="H_Update" targetRef="H_Status"/>
+            <bpmn:sequenceFlow id="H_F7" sourceRef="H_Arrived" targetRef="H_SetArrived" name="yes"/>
+            <bpmn:sequenceFlow id="H_F8" sourceRef="H_SetArrived" targetRef="H_End"/>
+        </bpmn:subProcess>
+    </bpmn:process>
+    <bpmndi:BPMNDiagram id="Diagram_Buy">
+        <bpmndi:BPMNPlane id="Plane_Buy" bpmnElement="Collaboration_Buy">
+            <bpmndi:BPMNShape id="Participant_Customer_di" bpmnElement="Participant_Customer" isHorizontal="true">
+                <dc:Bounds x="160" y="85" width="1628" height="250"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Participant_Shop_di" bpmnElement="Participant_Shop" isHorizontal="true">
+                <dc:Bounds x="160" y="400" width="1900" height="1040"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="C_Start_di" bpmnElement="C_Start">
+                <dc:Bounds x="222" y="192" width="36" height="36"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="C_Choose_di" bpmnElement="C_Choose">
+                <dc:Bounds x="310" y="170" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="C_AddCart_di" bpmnElement="C_AddCart">
+                <dc:Bounds x="470" y="170" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="C_Request_di" bpmnElement="C_Request">
+                <dc:Bounds x="612" y="192" width="36" height="36"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="C_GatewayOverview_di" bpmnElement="C_GatewayOverview">
+                <dc:Bounds x="725" y="185" width="50" height="50"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="C_EarlyReject_di" bpmnElement="C_EarlyReject">
+                <dc:Bounds x="802" y="112" width="36" height="36"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="C_EndEarlyReject_di" bpmnElement="C_EndEarlyReject">
+                <dc:Bounds x="1002" y="112" width="36" height="36"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="C_Overview_di" bpmnElement="C_Overview">
+                <dc:Bounds x="872" y="192" width="36" height="36"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="C_Select_di" bpmnElement="C_Select">
+                <dc:Bounds x="950" y="170" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="C_SendOrder_di" bpmnElement="C_SendOrder">
+                <dc:Bounds x="1132" y="192" width="36" height="36"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="C_GatewayOrder_di" bpmnElement="C_GatewayOrder">
+                <dc:Bounds x="1255" y="185" width="50" height="50"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="C_OrderReject_di" bpmnElement="C_OrderReject">
+                <dc:Bounds x="1422" y="112" width="36" height="36"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="C_EndOrderReject_di" bpmnElement="C_EndOrderReject">
+                <dc:Bounds x="1532" y="112" width="36" height="36"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="C_Confirmation_di" bpmnElement="C_Confirmation">
+                <dc:Bounds x="1372" y="272" width="36" height="36"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="C_Wait_di" bpmnElement="C_Wait">
+                <dc:Bounds x="1480" y="250" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="C_EndDelivered_di" bpmnElement="C_EndDelivered">
+                <dc:Bounds x="1652" y="272" width="36" height="36"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="S_Start_di" bpmnElement="S_Start">
+                <dc:Bounds x="210" y="522" width="36" height="36"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="S_Check_di" bpmnElement="S_Check">
+                <dc:Bounds x="298" y="500" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="S_Calc_di" bpmnElement="S_Calc">
+                <dc:Bounds x="470" y="500" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="S_Overview_di" bpmnElement="S_Overview">
+                <dc:Bounds x="642" y="522" width="36" height="36"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="S_Order_di" bpmnElement="S_Order">
+                <dc:Bounds x="732" y="522" width="36" height="36"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="S_Reserve_di" bpmnElement="S_Reserve">
+                <dc:Bounds x="830" y="500" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="S_Create_di" bpmnElement="S_Create">
+                <dc:Bounds x="1000" y="500" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="S_OrderObject_di" bpmnElement="S_OrderObject">
+                <dc:Bounds x="1032" y="615" width="36" height="50"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="S_Confirm_di" bpmnElement="S_Confirm">
+                <dc:Bounds x="1192" y="522" width="36" height="36"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="S_Process_di" bpmnElement="S_Process" isExpanded="false">
+                <dc:Bounds x="1310" y="500" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="S_Receipt_di" bpmnElement="S_Receipt">
+                <dc:Bounds x="1480" y="500" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="S_ReceiptObject_di" bpmnElement="S_ReceiptObject">
+                <dc:Bounds x="1512" y="615" width="36" height="50"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="S_End_di" bpmnElement="S_End">
+                <dc:Bounds x="1652" y="522" width="36" height="36"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="S_CheckError_di" bpmnElement="S_CheckError">
+                <dc:Bounds x="332" y="562" width="36" height="36"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="S_EarlyReject_di" bpmnElement="S_EarlyReject">
+                <dc:Bounds x="582" y="752" width="36" height="36"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="S_EarlyRejectEnd_di" bpmnElement="S_EarlyRejectEnd">
+                <dc:Bounds x="732" y="752" width="36" height="36"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="S_ReserveError_di" bpmnElement="S_ReserveError">
+                <dc:Bounds x="862" y="562" width="36" height="36"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="S_OrderReject_di" bpmnElement="S_OrderReject">
+                <dc:Bounds x="1262" y="752" width="36" height="36"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="S_OrderRejectEnd_di" bpmnElement="S_OrderRejectEnd">
+                <dc:Bounds x="1452" y="752" width="36" height="36"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="S_PaymentSub_di" bpmnElement="S_PaymentSub" isExpanded="true">
+                <dc:Bounds x="300" y="870" width="570" height="550"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="P_Start_di" bpmnElement="P_Start">
+                <dc:Bounds x="340" y="1152" width="36" height="36"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="P_Split_di" bpmnElement="P_Split">
+                <dc:Bounds x="435" y="1145" width="50" height="50"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="P_Refund_di" bpmnElement="P_Refund">
+                <dc:Bounds x="450" y="900" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="P_Capture_di" bpmnElement="P_Capture">
+                <dc:Bounds x="550" y="1020" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="P_CaptureComp_di" bpmnElement="P_CaptureComp">
+                <dc:Bounds x="552" y="1002" width="36" height="36"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="P_CaptureError_di" bpmnElement="P_CaptureError">
+                <dc:Bounds x="602" y="1002" width="36" height="36"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="P_Debt_di" bpmnElement="P_Debt">
+                <dc:Bounds x="690" y="900" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="P_Invoice_di" bpmnElement="P_Invoice">
+                <dc:Bounds x="550" y="1130" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="P_Ship_di" bpmnElement="P_Ship" isExpanded="false">
+                <dc:Bounds x="550" y="1240" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="P_ShipError_di" bpmnElement="P_ShipError">
+                <dc:Bounds x="552" y="1302" width="36" height="36"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="P_Merge_di" bpmnElement="P_Merge">
+                <dc:Bounds x="695" y="1145" width="50" height="50"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="P_End_di" bpmnElement="P_End">
+                <dc:Bounds x="772" y="1152" width="36" height="36"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="P_Compensate_di" bpmnElement="P_Compensate">
+                <dc:Bounds x="672" y="1340" width="36" height="36"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="S_ShippingSub_di" bpmnElement="S_ShippingSub" isExpanded="true">
+                <dc:Bounds x="1050" y="990" width="990" height="340"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="H_Start_di" bpmnElement="H_Start">
+                <dc:Bounds x="1090" y="1102" width="36" height="36"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="H_Inform_di" bpmnElement="H_Inform">
+                <dc:Bounds x="1200" y="1080" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="H_Package_di" bpmnElement="H_Package">
+                <dc:Bounds x="1360" y="1080" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="H_Status_di" bpmnElement="H_Status">
+                <dc:Bounds x="1522" y="1102" width="36" height="36"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="H_Arrived_di" bpmnElement="H_Arrived">
+                <dc:Bounds x="1625" y="1095" width="50" height="50"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="H_Update_di" bpmnElement="H_Update">
+                <dc:Bounds x="1600" y="1190" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="H_SetArrived_di" bpmnElement="H_SetArrived">
+                <dc:Bounds x="1750" y="1020" width="100" height="80"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="H_End_di" bpmnElement="H_End">
+                <dc:Bounds x="1982" y="1042" width="36" height="36"/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNEdge id="C_F1_di" bpmnElement="C_F1">
+                <di:waypoint x="258" y="210"/>
+                <di:waypoint x="310" y="210"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="C_F2_di" bpmnElement="C_F2">
+                <di:waypoint x="410" y="210"/>
+                <di:waypoint x="470" y="210"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="C_F3_di" bpmnElement="C_F3">
+                <di:waypoint x="570" y="210"/>
+                <di:waypoint x="612" y="210"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="C_F4_di" bpmnElement="C_F4">
+                <di:waypoint x="648" y="210"/>
+                <di:waypoint x="725" y="210"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="C_F5_di" bpmnElement="C_F5">
+                <di:waypoint x="750" y="185"/>
+                <di:waypoint x="750" y="130"/>
+                <di:waypoint x="802" y="130"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="C_F6_di" bpmnElement="C_F6">
+                <di:waypoint x="838" y="130"/>
+                <di:waypoint x="1002" y="130"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="C_F7_di" bpmnElement="C_F7">
+                <di:waypoint x="775" y="210"/>
+                <di:waypoint x="872" y="210"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="C_F8_di" bpmnElement="C_F8">
+                <di:waypoint x="908" y="210"/>
+                <di:waypoint x="950" y="210"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="C_F9_di" bpmnElement="C_F9">
+                <di:waypoint x="1050" y="210"/>
+                <di:waypoint x="1132" y="210"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="C_F10_di" bpmnElement="C_F10">
+                <di:waypoint x="1168" y="210"/>
+                <di:waypoint x="1255" y="210"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="C_F11_di" bpmnElement="C_F11">
+                <di:waypoint x="1280" y="185"/>
+                <di:waypoint x="1280" y="130"/>
+                <di:waypoint x="1422" y="130"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="C_F12_di" bpmnElement="C_F12">
+                <di:waypoint x="1458" y="130"/>
+                <di:waypoint x="1532" y="130"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="C_F13_di" bpmnElement="C_F13">
+                <di:waypoint x="1280" y="235"/>
+                <di:waypoint x="1280" y="290"/>
+                <di:waypoint x="1372" y="290"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="C_F14_di" bpmnElement="C_F14">
+                <di:waypoint x="1408" y="290"/>
+                <di:waypoint x="1480" y="290"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="C_F15_di" bpmnElement="C_F15">
+                <di:waypoint x="1580" y="290"/>
+                <di:waypoint x="1652" y="290"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="S_F1_di" bpmnElement="S_F1">
+                <di:waypoint x="246" y="540"/>
+                <di:waypoint x="298" y="540"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="S_F2_di" bpmnElement="S_F2">
+                <di:waypoint x="398" y="540"/>
+                <di:waypoint x="470" y="540"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="S_F3_di" bpmnElement="S_F3">
+                <di:waypoint x="570" y="540"/>
+                <di:waypoint x="642" y="540"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="S_F4_di" bpmnElement="S_F4">
+                <di:waypoint x="678" y="540"/>
+                <di:waypoint x="732" y="540"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="S_F5_di" bpmnElement="S_F5">
+                <di:waypoint x="768" y="540"/>
+                <di:waypoint x="830" y="540"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="S_F6_di" bpmnElement="S_F6">
+                <di:waypoint x="930" y="540"/>
+                <di:waypoint x="1000" y="540"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="S_F7_di" bpmnElement="S_F7">
+                <di:waypoint x="1100" y="540"/>
+                <di:waypoint x="1192" y="540"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="S_F8_di" bpmnElement="S_F8">
+                <di:waypoint x="1228" y="540"/>
+                <di:waypoint x="1310" y="540"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="S_F9_di" bpmnElement="S_F9">
+                <di:waypoint x="1410" y="540"/>
+                <di:waypoint x="1480" y="540"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="S_F10_di" bpmnElement="S_F10">
+                <di:waypoint x="1580" y="540"/>
+                <di:waypoint x="1652" y="540"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="S_E1_di" bpmnElement="S_E1">
+                <di:waypoint x="350" y="598"/>
+                <di:waypoint x="350" y="770"/>
+                <di:waypoint x="582" y="770"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="S_E2_di" bpmnElement="S_E2">
+                <di:waypoint x="618" y="770"/>
+                <di:waypoint x="732" y="770"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="S_E3_di" bpmnElement="S_E3">
+                <di:waypoint x="880" y="598"/>
+                <di:waypoint x="880" y="770"/>
+                <di:waypoint x="1262" y="770"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="S_E4_di" bpmnElement="S_E4">
+                <di:waypoint x="1298" y="770"/>
+                <di:waypoint x="1452" y="770"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="P_F1_di" bpmnElement="P_F1">
+                <di:waypoint x="376" y="1170"/>
+                <di:waypoint x="435" y="1170"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="P_F2_di" bpmnElement="P_F2">
+                <di:waypoint x="460" y="1145"/>
+                <di:waypoint x="460" y="1060"/>
+                <di:waypoint x="550" y="1060"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="P_F3_di" bpmnElement="P_F3">
+                <di:waypoint x="485" y="1170"/>
+                <di:waypoint x="550" y="1170"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="P_F4_di" bpmnElement="P_F4">
+                <di:waypoint x="460" y="1195"/>
+                <di:waypoint x="460" y="1280"/>
+                <di:waypoint x="550" y="1280"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="P_F5_di" bpmnElement="P_F5">
+                <di:waypoint x="650" y="1060"/>
+                <di:waypoint x="720" y="1060"/>
+                <di:waypoint x="720" y="1145"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="P_F6_di" bpmnElement="P_F6">
+                <di:waypoint x="620" y="1002"/>
+                <di:waypoint x="620" y="940"/>
+                <di:waypoint x="690" y="940"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="P_F8_di" bpmnElement="P_F8">
+                <di:waypoint x="650" y="1170"/>
+                <di:waypoint x="695" y="1170"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="P_F9_di" bpmnElement="P_F9">
+                <di:waypoint x="650" y="1280"/>
+                <di:waypoint x="720" y="1280"/>
+                <di:waypoint x="720" y="1195"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="P_F10_di" bpmnElement="P_F10">
+                <di:waypoint x="745" y="1170"/>
+                <di:waypoint x="772" y="1170"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="P_F11_di" bpmnElement="P_F11">
+                <di:waypoint x="570" y="1338"/>
+                <di:waypoint x="570" y="1358"/>
+                <di:waypoint x="672" y="1358"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="P_CompAssoc_di" bpmnElement="P_CompAssoc">
+                <di:waypoint x="570" y="1002"/>
+                <di:waypoint x="570" y="940"/>
+                <di:waypoint x="550" y="940"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="H_F1_di" bpmnElement="H_F1">
+                <di:waypoint x="1126" y="1120"/>
+                <di:waypoint x="1200" y="1120"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="H_F2_di" bpmnElement="H_F2">
+                <di:waypoint x="1300" y="1120"/>
+                <di:waypoint x="1360" y="1120"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="H_F3_di" bpmnElement="H_F3">
+                <di:waypoint x="1460" y="1120"/>
+                <di:waypoint x="1522" y="1120"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="H_F4_di" bpmnElement="H_F4">
+                <di:waypoint x="1558" y="1120"/>
+                <di:waypoint x="1625" y="1120"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="H_F5_di" bpmnElement="H_F5">
+                <di:waypoint x="1650" y="1145"/>
+                <di:waypoint x="1650" y="1190"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="H_F6_di" bpmnElement="H_F6">
+                <di:waypoint x="1600" y="1230"/>
+                <di:waypoint x="1540" y="1230"/>
+                <di:waypoint x="1540" y="1138"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="H_F7_di" bpmnElement="H_F7">
+                <di:waypoint x="1650" y="1095"/>
+                <di:waypoint x="1650" y="1060"/>
+                <di:waypoint x="1750" y="1060"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="H_F8_di" bpmnElement="H_F8">
+                <di:waypoint x="1850" y="1060"/>
+                <di:waypoint x="1982" y="1060"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="MF_Request_di" bpmnElement="MF_Request">
+                <di:waypoint x="630" y="228"/>
+                <di:waypoint x="630" y="340"/>
+                <di:waypoint x="228" y="340"/>
+                <di:waypoint x="228" y="522"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="MF_Overview_di" bpmnElement="MF_Overview">
+                <di:waypoint x="660" y="522"/>
+                <di:waypoint x="660" y="360"/>
+                <di:waypoint x="890" y="360"/>
+                <di:waypoint x="890" y="228"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="MF_Order_di" bpmnElement="MF_Order">
+                <di:waypoint x="1150" y="228"/>
+                <di:waypoint x="1150" y="370"/>
+                <di:waypoint x="750" y="370"/>
+                <di:waypoint x="750" y="522"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="MF_Confirm_di" bpmnElement="MF_Confirm">
+                <di:waypoint x="1210" y="522"/>
+                <di:waypoint x="1210" y="380"/>
+                <di:waypoint x="1390" y="380"/>
+                <di:waypoint x="1390" y="308"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="MF_EarlyReject_di" bpmnElement="MF_EarlyReject">
+                <di:waypoint x="600" y="752"/>
+                <di:waypoint x="600" y="350"/>
+                <di:waypoint x="820" y="350"/>
+                <di:waypoint x="820" y="148"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="MF_OrderReject_di" bpmnElement="MF_OrderReject">
+                <di:waypoint x="1280" y="752"/>
+                <di:waypoint x="1280" y="390"/>
+                <di:waypoint x="1440" y="390"/>
+                <di:waypoint x="1440" y="148"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="S_OrderAssoc_di" bpmnElement="S_OrderAssoc">
+                <di:waypoint x="1050" y="580"/>
+                <di:waypoint x="1050" y="615"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="S_ReceiptAssoc_di" bpmnElement="S_ReceiptAssoc">
+                <di:waypoint x="1530" y="580"/>
+                <di:waypoint x="1530" y="615"/>
+            </bpmndi:BPMNEdge>
+        </bpmndi:BPMNPlane>
+    </bpmndi:BPMNDiagram>
+</bpmn:definitions>
