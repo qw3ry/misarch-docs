@@ -1,3 +1,12 @@
+%% OBSOLETE: this diagram does not reflect the implemented architecture.
+%% It shows the purchase as a sequence of synchronous calls, with the Order service
+%% calling User, Inventory, Discount and Tax directly and the frontend sequencing
+%% Order, Invoice and Payment. The implementation coordinates the buy process through
+%% events instead, and services validate foreign entities against locally imported
+%% copies rather than by request (see ADR-6 and ADR-7).
+%% Kept for reference only. It is not referenced by any documentation page.
+%% Current description: docs/docs/architecture/saga.mdx
+
 sequenceDiagram
     actor Human User
     Human User ->>+ Frontend: "Complete purchase"
