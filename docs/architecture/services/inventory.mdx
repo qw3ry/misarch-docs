@@ -78,14 +78,14 @@ This event is published when at least one `ProductItem` for the `ProductVariants
 
 ### Subscribed Events
 
-- [catalog/product-variant/created](/docs/docs/architecture/services/catalog#catalogproduct-variantcreated): Used to import `ProductVariant` from the `Catalog` bounded context.
-- [order/order/created](/docs/docs/architecture/services/order#orderordercreated): Used to reserve the `ProductItems` for an `Order`.
-- [payment/payment/payment-enabled](/docs/docs/architecture/services/payment#paymentpaymentpayment-enabled): Send Inventory to Fullfillment
-- [payment/payment/payment-failed](/docs/docs/architecture/services/payment#paymentpaymentpayment-failed): Releases Product Items related to the order
-- [shipment/shipment/status-updated](/docs/docs/architecture/services/shipment#shipmentshipmentstatus-updated): Updates the inventory status based on the shipment status
-- [shipment/shipment/created](/docs/docs/architecture/services/shipment#shipmentshipmentcreated): Updates the inventory status based on the shipment status
-- [discount/order/validation-failed](/docs/docs/architecture/services/discount#discountordervalidation-failed): Releases Product Items related to the order
+- [catalog/product-variant/created](/architecture/services/catalog#catalogproduct-variantcreated): Used to import `ProductVariant` from the `Catalog` bounded context.
+- [order/order/created](/architecture/services/order#orderordercreated): Used to reserve the `ProductItems` for an `Order`.
+- [payment/payment/payment-enabled](/architecture/services/payment#paymentpaymentpayment-enabled): Send Inventory to Fullfillment
+- [payment/payment/payment-failed](/architecture/services/payment#paymentpaymentpayment-failed): Releases Product Items related to the order
+- [shipment/shipment/status-updated](/architecture/services/shipment#shipmentshipmentstatus-updated): Updates the inventory status based on the shipment status
+- [shipment/shipment/created](/architecture/services/shipment#shipmentshipmentcreated): Updates the inventory status based on the shipment status
+- [discount/order/validation-failed](/architecture/services/discount#discountordervalidation-failed): Releases Product Items related to the order
 
 ## Important ADRs
 
-- [Check Entity Consistency](/docs/docs/architecture/adr/check-entity-consistency)
+- [Check Entity Consistency](/architecture/adr/check-entity-consistency)

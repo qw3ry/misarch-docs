@@ -12,7 +12,6 @@ npm i
 
 ```
 npm run render-diagrams
-npm run update-graphql-docs
 npm start
 ```
 
@@ -22,7 +21,6 @@ This command starts a local development server and opens up a browser window. Mo
 
 ```
 npm run render-diagrams
-npm run update-graphql-docs
 npm run build
 ```
 
