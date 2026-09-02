@@ -20,15 +20,15 @@ Chosen option: "import related entities into service by listening to dapr creati
 results in more loose coupling, as we don't have synchronous requests between services when creating the relations.
 Note that there might be exceptions in cases where this approach is not applicable.
 
-## Pros and Cons of the Options
+### Consequences
 
-### import related entities into service by listening to dapr creation events created by the owning service
+- Good, because services are more loosely coupled: creating a relation requires no synchronous request to the service that owns the referenced entity.
+- Neutral, because importing entities reduces communication overhead when an imported entity is referenced more than once on average, but increases it when it is referenced less than once.
+- Bad, because delayed events, such as deletion events, can cause temporary inconsistencies.
 
-- Good, because more loosely coupled: no requests sent when creating the relation, instead async notifications via the event bus when entities are created
-- Neutral, because potentially more/less events/requests: reduces communication overhead when related entity is on average used more than once, otherwise increases overhead
-- Bad, because less enforced consistency: e.g. deletion events might be delayed, can cause temporary inconsistencies (as usual with loose coupling)
+## Pros and Cons of the Other Options
 
-### send a request to the owning service to verify that the entity with a given ID is valid
+### Send a request to the owning service to verify that the entity with a given ID is valid
 
 - Good, because results in stricter consistency: always validates current state
 - Neutral, because potentially more/less events/requests: reduces communication overhead when related entity is on average used less than once, otherwise increases overhead

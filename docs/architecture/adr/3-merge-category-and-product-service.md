@@ -27,7 +27,13 @@ Chosen option: "Merge category and product service", because
 
 We do not see a clear cut that would still allow us to implement the functionality we want out of the system.
 
-## Pros and Cons of the Options
+### Consequences
+
+- Bad, merging services reduces separation of concerns
+- Good, prevents significant network overhead
+- Neutral, one service less in total
+
+## Pros and Cons of the Other Options
 
 ### Save characteristic values of product variants in product service and let category service request the needed information
 
@@ -46,9 +52,3 @@ We do not see a clear cut that would still allow us to implement the functionali
 - Bad, can lead to consistency problems
 - Good, sync might create less overhead than just queries
 - Bad, data duplications requires more memory
-
-### Merge category and product service
-
-- Bad, merging services reduces separation of concerns
-- Good, prevents significant network overhead
-- Neutral, one service less in total

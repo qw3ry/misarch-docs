@@ -23,6 +23,12 @@ because easier to implement, and we need totalCount support for the frontend.
 
 ### Consequences
 
+- Good, because clients can start at an arbitrary offset.
+- Good, because offset-based pagination is easier to implement than cursor-based pagination, particularly with SQL databases.
+- Good, because `totalCount` allows clients to calculate and display the number of pages.
+- Bad, because offset-based pagination is less flexible than cursor-based pagination.
+- Bad, because the pagination model does not follow the Relay connection specification.
+
 A typical GraphQL schema will look like this:
 
 ```graphql
@@ -91,9 +97,9 @@ enum CommonOrderField {
 }
 ```
 
-## Pros and Cons of the Options
+## Pros and Cons of the Other Options
 
-### cursor-based pagination (according to connection specification) with totalCount support
+### Cursor-based pagination with totalCount support
 
 - Good, because hides away technical implementation (can be offset based or different)
 - Good, because standardized: https://relay.dev/graphql/connections.htm
@@ -101,7 +107,7 @@ enum CommonOrderField {
 - Bad, because difficult to implement: cursors have to encode values of all fields used in ordering
 - Bad, because does not easily allow to start at an arbitrary offset
 
-### cursor-based pagination (according to connection specification) without totalCount support
+### Cursor-based pagination without totalCount support
 
 - Good, because hides away technical implementation (can be offset based or different)
 - Good, because standardized: https://relay.dev/graphql/connections.htm
@@ -109,15 +115,7 @@ enum CommonOrderField {
 - Bad, because does not easily allow to start at an arbitrary offset
 - Bad, because clients cannot fetch the total amount of elements, which is necessary for some frontend designs
 
-### offset-based pagination with totalCount support
-
-- Good, because allows to start at arbitrary offset
-- Good, because easier to implement compared to cursor-based pagination (in particular with SQL databases)
-- Good, because includes totalCount support, allowing clients to display the amount of pages
-- Bad, because less flexible than cursor-based pagination
-- Bad, because non-standard
-
-### offset-based pagination without totalCount support
+### Offset-based pagination without totalCount support
 
 - Good, because allows to start at arbitrary offset
 - Good, because easiest to implement (in particular with SQL databases), due to missing totalCount support

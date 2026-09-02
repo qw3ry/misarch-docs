@@ -25,23 +25,19 @@ Chosen option: "GraphQL", because
 ### Consequences
 
 - Good, because allows frontend to easily fetch and combine data from different sources in the backend
-- Neutral, because requires us to find a way how to combine API of different services into one unified GraphQL API
-
-## Pros and Cons of the Options
-
-### GraphQL
-
-- Good, because allows frontend to easily fetch and combine data from different sources in the backend
 - Good, because built-in strict type system
 - Good, because GraphiQL allows users to explore the API, including with a graphical interface to build requests
 - Good, because allows client to define which data should be fetched, reducing overfetching
 - Good, because allows to solve N+1 problem of requests, as instead of multiple consecutive requests, a single request can define all data which needs to be fetched
 - Bad, because more difficult to implement, in particular regarding authorization
+- Neutral, because requires us to find a way how to combine API of different services into one unified GraphQL API
+
+## Pros and Cons of the Other Options
 
 ### REST
 
 - Good, because easiest to implement, in particular regarding authentication
-- Good, because easy to use for users of the reference architecture
+- Good, because easy to use for developers and operations
 - Good, because good for browser caching
 - Neutral, because no built-in typing, but could be provided via OpenAPI
 - Bad, because more difficult to combine data from different sources: combine in gateway? have all routes from services in gateway?
@@ -52,6 +48,6 @@ Chosen option: "GraphQL", because
 - Good, because allows streaming
 - Good, because built-in type system
 - Good, because binary protocol is more efficient
-- Neutral, because binary format is more difficult to understand in web environment, in particular form users of the reference architecture, but text-based protocol could also be used. JSON could also be used, but it is non-standard.
+- Neutral, because binary format is more difficult to understand in web environment, but text-based protocol could also be used. JSON could also be used, but it is non-standard.
 - Bad, because less common in web environments compared to other options
 - Bad, because compared to GraphQL, does not provide unified way for client to define which data should be fetched
